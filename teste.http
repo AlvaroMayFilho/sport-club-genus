@@ -1,0 +1,9 @@
+POST http://127.0.0.1:5000/api/adesao/torcedor
+Content-Type: application/json
+
+{
+  "user_id": "usuario_teste_01",
+  "grupo_id": "bronze",
+  "nome": "Nome Teste",
+  "cpf": "97751910097"
+}
