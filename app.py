@@ -4,20 +4,24 @@ from firebase_admin import credentials
 from flask import Flask, jsonify, render_template
 from dotenv import load_dotenv
 
-# Carrega as variáveis do .env local (no servidor, as variáveis do painel têm prioridade)
-load_dotenv()
+# Define o caminho absoluto da pasta raiz do projeto
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Força a leitura do .env usando o caminho absoluto
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 if not firebase_admin._apps:
-    # Lê o caminho da nuvem, ou usa o local por padrão
-    caminho_firebase = os.getenv("FIREBASE_CREDENTIALS_PATH", "firebase-key.json")
+    # Lê a variável ou usa o caminho absoluto do json como fallback
+    caminho_firebase = os.getenv("FIREBASE_CREDENTIALS_PATH", os.path.join(BASE_DIR, "firebase-key.json"))
     cred = credentials.Certificate(caminho_firebase)
     firebase_admin.initialize_app(cred)
 
 from rotas.adesao import adesao_bp
-
+# from rotas.auth import auth_bp
 
 app = Flask(__name__)
 app.register_blueprint(adesao_bp)
+# app.register_blueprint(auth_bp)
 
 @app.route('/')
 def index():
