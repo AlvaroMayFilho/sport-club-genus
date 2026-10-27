@@ -3,129 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sport Club Genus - O Furacão do Madeira</title>
+    <title>Sport Club Genus | O Furacão do Madeira</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: {
                         grena: '#7A1220',
                         ouro: '#FFD000',
-                        escuro: '#0f172a'
+                        dark: '#09090b',
+                        darker: '#050505',
+                        glass: 'rgba(255, 255, 255, 0.03)'
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
                     }
                 }
             }
         }
     </script>
+    <style>
+        /* Oculta scrollbar horizontal e suaviza a rolagem */
+        body { overflow-x: hidden; scroll-behavior: smooth; }
+        .bg-grid { background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 40px 40px; }
+    </style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans min-h-screen selection:bg-grena selection:text-white">
+<body class="bg-darker text-white font-sans antialiased selection:bg-ouro selection:text-dark">
 
-    <!-- Navbar Flutuante (Estilo Pill) -->
-    <div class="fixed w-full top-6 z-50 px-4 flex justify-center">
-        <nav class="bg-escuro text-white rounded-full px-3 py-2 flex items-center justify-between w-full max-w-5xl shadow-2xl border border-gray-800 backdrop-blur-md bg-opacity-95">
+    <!-- Efeitos de Luz de Fundo (Cinematic Lighting) -->
+    <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-grena/20 blur-[120px] pointer-events-none mix-blend-screen animate-pulse-slow"></div>
+    <div class="absolute top-[20%] right-[-10%] w-[600px] h-[600px] rounded-full bg-ouro/10 blur-[150px] pointer-events-none mix-blend-screen"></div>
 
-            <!-- Logo Circular -->
-            <div class="bg-white rounded-full p-2 h-12 w-12 flex items-center justify-center shadow-inner">
-                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo Genus" class="h-8 object-contain">
-            </div>
+    <div class="absolute inset-0 bg-grid pointer-events-none opacity-30"></div>
 
-            <!-- Links Desktop -->
-            <div class="hidden md:flex space-x-8 text-sm font-medium text-gray-300">
-                <a href="#" class="hover:text-white transition-colors duration-300">Início</a>
-                <a href="#" class="hover:text-white transition-colors duration-300">A História</a>
-                <a href="#" class="hover:text-white transition-colors duration-300">Planos</a>
-                <a href="#" class="hover:text-white transition-colors duration-300">Contato</a>
-            </div>
+    <!-- Navbar Glassmorphism -->
+    <nav class="fixed w-full z-50 bg-dark/60 backdrop-blur-xl border-b border-white/5 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex justify-between items-center h-24">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo Genus" class="h-16 w-auto drop-shadow-lg">
+                </div>
 
-            <!-- Botão CTA Desktop -->
-            <div class="hidden md:block">
-                <a href="#" class="bg-white text-escuro text-sm font-bold px-6 py-2.5 rounded-full hover:bg-ouro hover:text-grena transition-all duration-300 shadow-sm flex items-center gap-2">
-                    Área do Sócio
-                </a>
-            </div>
+                <!-- Links Centrais -->
+                <div class="hidden md:flex space-x-10">
+                    <a href="#" class="text-sm font-semibold text-gray-300 hover:text-ouro transition-colors tracking-wide">Início</a>
+                    <a href="#" class="text-sm font-semibold text-gray-300 hover:text-ouro transition-colors tracking-wide">A História</a>
+                    <a href="#" class="text-sm font-semibold text-gray-300 hover:text-ouro transition-colors tracking-wide">Planos</a>
+                    <a href="#" class="text-sm font-semibold text-gray-300 hover:text-ouro transition-colors tracking-wide">Contato</a>
+                </div>
 
-            <!-- Toggle Mobile -->
-            <button id="mobile-btn" class="md:hidden bg-gray-800 p-2 rounded-full text-gray-300 hover:text-white focus:outline-none mr-1">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-            </button>
-        </nav>
-    </div>
-
-    <!-- Menu Mobile Dropdown (Oculto por padrão) -->
-    <div id="mobile-menu" class="hidden fixed inset-0 z-40 bg-gray-50/95 backdrop-blur-sm flex justify-center items-start pt-32 px-4">
-        <div class="bg-escuro w-full max-w-sm rounded-3xl p-8 flex flex-col space-y-6 text-center shadow-2xl border border-gray-800">
-            <button id="close-menu" class="absolute top-6 right-6 bg-white text-escuro rounded-full p-2 text-xs font-bold shadow-md">
-                Fechar ✕
-            </button>
-            <a href="#" class="text-gray-300 hover:text-white text-lg font-medium">Início</a>
-            <a href="#" class="text-gray-300 hover:text-white text-lg font-medium">A História</a>
-            <a href="#" class="text-gray-300 hover:text-white text-lg font-medium">Planos</a>
-            <a href="#" class="text-gray-300 hover:text-white text-lg font-medium">Contato</a>
-            <div class="pt-4">
-                <a href="#" class="bg-white text-escuro font-bold px-8 py-3 rounded-full hover:bg-ouro block w-full">Área do Sócio</a>
+                <!-- Botão Área do Sócio -->
+                <div class="flex items-center">
+                    <button class="bg-glass border border-white/10 hover:border-ouro/50 hover:bg-ouro/10 text-white text-sm font-bold py-2.5 px-6 rounded-full transition-all duration-300 shadow-[0_0_15px_rgba(255,208,0,0.05)]">
+                        Área do Sócio
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
+    </nav>
 
-    <!-- Hero Section Minimalista -->
-    <main class="pt-36 pb-20 min-h-screen flex items-center relative overflow-hidden">
-        <!-- Elemento de fundo sutil -->
-        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-grena rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob"></div>
-        <div class="absolute top-40 left-0 -ml-20 w-72 h-72 bg-ouro rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-2000"></div>
+    <!-- Hero Section -->
+    <main class="relative pt-32 pb-16 sm:pt-40 sm:pb-24 lg:pb-32 overflow-hidden min-h-screen flex items-center">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 w-full">
+            <div class="lg:grid lg:grid-cols-12 lg:gap-16 items-center">
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-8 items-center">
-
-                <!-- Textos e CTA -->
-                <div class="space-y-8 text-center md:text-left">
-                    <div class="inline-flex items-center px-4 py-1.5 rounded-full bg-red-100 text-grena font-semibold text-xs tracking-widest uppercase shadow-sm border border-red-200">
-                        <span class="w-1.5 h-1.5 rounded-full bg-grena mr-2 animate-pulse"></span>
+                <!-- Coluna Esquerda: Copywriting -->
+                <div class="lg:col-span-6 text-center lg:text-left mb-16 lg:mb-0">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-ouro text-xs font-bold uppercase tracking-[0.2em] mb-8 shadow-sm backdrop-blur-sm">
+                        <span class="w-2 h-2 rounded-full bg-ouro animate-pulse"></span>
                         Temporada 2026
                     </div>
 
-                    <h1 class="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tight leading-[1.1]">
+                    <h1 class="text-5xl sm:text-6xl md:text-7xl font-black tracking-tighter mb-6 text-white leading-[1.1]">
                         O Furacão <br>
-                        <span class="text-grena">do Madeira</span>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-ouro to-yellow-200 drop-shadow-sm">do Madeira</span>
                     </h1>
 
-                    <p class="text-lg text-gray-500 max-w-lg mx-auto md:mx-0 leading-relaxed font-light">
-                        Garanta sua cota no novo programa de sócios. Apoie o maior da capital, tenha acesso a benefícios exclusivos e adquira o novo manto oficial.
+                    <p class="mt-6 text-lg sm:text-xl text-gray-400 font-light leading-relaxed max-w-2xl mx-auto lg:mx-0 mb-10">
+                        Garanta sua cota no novo programa de sócios. Apoie o maior da capital, tenha acesso a benefícios exclusivos, poder de decisão e adquira o novo manto oficial.
                     </p>
 
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-2">
-                        <button class="bg-grena text-white font-semibold px-8 py-3.5 rounded-full shadow-lg hover:bg-red-900 transition-all hover:-translate-y-1 hover:shadow-xl">
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <!-- CTA Primário -->
+                        <button class="group relative px-8 py-4 bg-grena text-white font-bold text-sm uppercase tracking-widest rounded-lg overflow-hidden shadow-[0_0_40px_rgba(122,18,32,0.4)] transition-all hover:scale-105 hover:shadow-[0_0_60px_rgba(122,18,32,0.6)]">
+                            <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
                             Sócio Torcedor
                         </button>
-                        <button class="bg-white text-gray-800 border border-gray-200 font-semibold px-8 py-3.5 rounded-full shadow-sm hover:border-grena hover:text-grena transition-all hover:-translate-y-1">
+
+                        <!-- CTA Secundário -->
+                        <button class="px-8 py-4 bg-transparent border border-ouro/30 text-ouro hover:bg-ouro hover:text-dark font-bold text-sm uppercase tracking-widest rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,208,0,0.3)]">
                             Sócio Investidor
                         </button>
                     </div>
+
+                    <!-- Prova Social / Status -->
+                    <div class="mt-12 flex items-center justify-center lg:justify-start gap-4 text-sm text-gray-500 font-medium">
+                        <div class="flex -space-x-3">
+                            <div class="w-10 h-10 rounded-full border-2 border-darker bg-gray-800"></div>
+                            <div class="w-10 h-10 rounded-full border-2 border-darker bg-gray-700"></div>
+                            <div class="w-10 h-10 rounded-full border-2 border-darker bg-grena flex items-center justify-center text-white text-xs">+</div>
+                        </div>
+                        <p>Junte-se a centenas de sócios fundadores.</p>
+                    </div>
                 </div>
 
-                <!-- Imagem do Manto (Flutuante) -->
-                <div class="relative flex justify-center mt-8 md:mt-0">
-                    <div class="absolute inset-0 bg-gradient-to-tr from-grena/20 to-ouro/20 rounded-full blur-3xl scale-75"></div>
-                    <img src="{{ url_for('static', filename='img/camiseta_frente.png') }}" alt="Camiseta Genus 2026" class="relative z-10 w-full max-w-md drop-shadow-2xl transform hover:scale-105 transition duration-700 ease-out">
+                <!-- Coluna Direita: Imagem do Produto -->
+                <div class="lg:col-span-6 relative flex justify-center lg:justify-end">
+                    <!-- Palco da Imagem -->
+                    <div class="relative w-full max-w-lg aspect-square flex items-center justify-center">
+                        <!-- Círculos de fundo para destacar a camisa -->
+                        <div class="absolute inset-0 bg-gradient-to-tr from-grena/10 to-ouro/5 rounded-full blur-2xl"></div>
+                        <div class="absolute inset-4 border border-white/5 rounded-full"></div>
+                        <div class="absolute inset-12 border border-white/5 rounded-full"></div>
+
+                        <!-- Imagem da Camiseta flutuante -->
+                        <img
+                            src="{{ url_for('static', filename='img/camiseta_frente.png') }}"
+                            alt="Manto Oficial Sport Club Genus"
+                            class="relative z-10 w-full h-auto object-contain animate-float drop-shadow-[0_30px_30px_rgba(0,0,0,0.8)]"
+                        >
+                    </div>
                 </div>
 
             </div>
         </div>
     </main>
 
-    <!-- Script para o Menu Mobile -->
-    <script>
-        const btn = document.getElementById('mobile-btn');
-        const closeBtn = document.getElementById('close-menu');
-        const menu = document.getElementById('mobile-menu');
-
-        btn.addEventListener('click', () => {
-            menu.classList.remove('hidden');
-        });
-
-        closeBtn.addEventListener('click', () => {
-            menu.classList.add('hidden');
-        });
-    </script>
 </body>
 </html>
