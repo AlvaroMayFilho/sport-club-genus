@@ -5,140 +5,152 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sport Club Genus | O Furacão do Madeira</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Anton', 'sans-serif'],
+                    },
                     colors: {
                         grena: '#7A1220',
                         ouro: '#FFD000',
-                        dark: '#09090b',
-                        darker: '#050505',
-                        glass: 'rgba(255, 255, 255, 0.03)'
-                    },
-                    animation: {
-                        'float': 'float 6s ease-in-out infinite',
-                        'pulse-slow': 'pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-20px)' },
-                        }
+                        dark: '#0a0a0a',
+                        darker: '#050505'
                     }
                 }
             }
         }
     </script>
     <style>
-        /* Oculta scrollbar horizontal e suaviza a rolagem */
-        body { overflow-x: hidden; scroll-behavior: smooth; }
-        .bg-grid { background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 40px 40px; }
+        .text-outline {
+            color: transparent;
+            -webkit-text-stroke: 2px #f3f4f6;
+        }
+        .text-outline-dark {
+            color: transparent;
+            -webkit-text-stroke: 2px #27272a;
+        }
+        .bg-stadium {
+            background-color: #7A1220;
+            background-image: radial-gradient(circle at center, #7A1220 0%, #4a0a13 100%);
+        }
     </style>
 </head>
-<body class="bg-darker text-white font-sans antialiased selection:bg-ouro selection:text-dark">
+<body class="bg-[#f8f9fa] text-gray-900 font-sans antialiased overflow-x-hidden">
 
-    <!-- Efeitos de Luz de Fundo (Cinematic Lighting) -->
-    <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-grena/20 blur-[120px] pointer-events-none mix-blend-screen animate-pulse-slow"></div>
-    <div class="absolute top-[20%] right-[-10%] w-[600px] h-[600px] rounded-full bg-ouro/10 blur-[150px] pointer-events-none mix-blend-screen"></div>
+    <!-- Navbar -->
+    <nav class="w-full bg-[#f8f9fa] py-4 px-6 md:px-12 flex justify-between items-center z-50 relative border-b border-gray-200">
+        <div class="flex items-center gap-2">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo Genus" class="h-10">
+        </div>
 
-    <div class="absolute inset-0 bg-grid pointer-events-none opacity-30"></div>
+        <div class="hidden md:flex space-x-12 text-sm font-semibold text-gray-900">
+            <a href="#" class="hover:text-grena transition-colors">O Clube</a>
+            <a href="#" class="hover:text-grena transition-colors">Planos</a>
+            <a href="#" class="hover:text-grena transition-colors">Vantagens</a>
+        </div>
 
-    <!-- Navbar Glassmorphism -->
-    <nav class="fixed w-full z-50 bg-dark/60 backdrop-blur-xl border-b border-white/5 transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="flex justify-between items-center h-24">
-                <!-- Logo -->
-                <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
-                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo Genus" class="h-16 w-auto drop-shadow-lg">
-                </div>
-
-                <!-- Links Centrais -->
-                <div class="hidden md:flex space-x-10">
-                    <a href="#" class="text-sm font-semibold text-gray-300 hover:text-ouro transition-colors tracking-wide">Início</a>
-                    <a href="#" class="text-sm font-semibold text-gray-300 hover:text-ouro transition-colors tracking-wide">A História</a>
-                    <a href="#" class="text-sm font-semibold text-gray-300 hover:text-ouro transition-colors tracking-wide">Planos</a>
-                    <a href="#" class="text-sm font-semibold text-gray-300 hover:text-ouro transition-colors tracking-wide">Contato</a>
-                </div>
-
-                <!-- Botão Área do Sócio -->
-                <div class="flex items-center">
-                    <button class="bg-glass border border-white/10 hover:border-ouro/50 hover:bg-ouro/10 text-white text-sm font-bold py-2.5 px-6 rounded-full transition-all duration-300 shadow-[0_0_15px_rgba(255,208,0,0.05)]">
-                        Área do Sócio
-                    </button>
-                </div>
-            </div>
+        <div class="flex items-center gap-4">
+            <a href="#" class="text-sm font-bold flex items-center gap-2 bg-gray-200 hover:bg-gray-300 px-5 py-2.5 rounded-sm transition-colors">
+                <span class="w-4 h-4 rounded-full bg-grena block"></span>
+                Área do Sócio
+            </a>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <main class="relative pt-32 pb-16 sm:pt-40 sm:pb-24 lg:pb-32 overflow-hidden min-h-screen flex items-center">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 w-full">
-            <div class="lg:grid lg:grid-cols-12 lg:gap-16 items-center">
+    <header class="relative w-full max-w-7xl mx-auto px-6 md:px-12 pt-16 md:pt-24 pb-32">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start relative">
 
-                <!-- Coluna Esquerda: Copywriting -->
-                <div class="lg:col-span-6 text-center lg:text-left mb-16 lg:mb-0">
-                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-ouro text-xs font-bold uppercase tracking-[0.2em] mb-8 shadow-sm backdrop-blur-sm">
-                        <span class="w-2 h-2 rounded-full bg-ouro animate-pulse"></span>
-                        Temporada 2026
+            <!-- Esquerda: Tipografia Gigante -->
+            <div class="z-10 pt-10">
+                <h1 class="font-display text-7xl md:text-[110px] leading-[0.85] text-dark uppercase tracking-tight mb-8">
+                    Transforme<br>
+                    Paixão em<br>
+                    <span class="text-grena">Poder</span>
+                </h1>
+                <p class="text-gray-600 text-lg font-medium max-w-md mb-8">
+                    Faça parte da história do maior clube da capital. Nosso programa de sócios oferece controle e vantagens que elevam sua jornada como torcedor.
+                </p>
+                <button class="bg-ouro hover:bg-yellow-400 text-dark font-bold text-sm uppercase px-8 py-4 rounded-sm transition-colors">
+                    Seja Sócio Torcedor &rarr;
+                </button>
+            </div>
+
+            <!-- Direita: Camiseta e Card Sobreposto -->
+            <div class="relative w-full h-[600px] flex justify-center items-center">
+                <!-- Imagem central (Camiseta) -->
+                <img src="{{ url_for('static', filename='img/camiseta.png') }}" alt="Nova Camisa Genus 2026" class="relative z-10 w-[80%] md:w-[110%] md:-ml-20 drop-shadow-2xl object-contain hover:scale-105 transition-transform duration-700">
+
+                <!-- Card Laranja/Grená Flutuante (Baseado na referência Frostski) -->
+                <div class="absolute -bottom-20 right-0 md:-right-10 bg-grena text-white p-8 w-80 shadow-2xl z-20 rounded-sm">
+                    <div class="flex items-center gap-3 mb-6">
+                        <svg class="w-6 h-6 text-ouro" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                        <h3 class="font-display text-xl uppercase tracking-wide leading-tight">Excelência<br>Em Campo</h3>
                     </div>
-
-                    <h1 class="text-5xl sm:text-6xl md:text-7xl font-black tracking-tighter mb-6 text-white leading-[1.1]">
-                        O Furacão <br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-ouro to-yellow-200 drop-shadow-sm">do Madeira</span>
-                    </h1>
-
-                    <p class="mt-6 text-lg sm:text-xl text-gray-400 font-light leading-relaxed max-w-2xl mx-auto lg:mx-0 mb-10">
-                        Garanta sua cota no novo programa de sócios. Apoie o maior da capital, tenha acesso a benefícios exclusivos, poder de decisão e adquira o novo manto oficial.
-                    </p>
-
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                        <!-- CTA Primário -->
-                        <button class="group relative px-8 py-4 bg-grena text-white font-bold text-sm uppercase tracking-widest rounded-lg overflow-hidden shadow-[0_0_40px_rgba(122,18,32,0.4)] transition-all hover:scale-105 hover:shadow-[0_0_60px_rgba(122,18,32,0.6)]">
-                            <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
-                            Sócio Torcedor
-                        </button>
-
-                        <!-- CTA Secundário -->
-                        <button class="px-8 py-4 bg-transparent border border-ouro/30 text-ouro hover:bg-ouro hover:text-dark font-bold text-sm uppercase tracking-widest rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,208,0,0.3)]">
-                            Sócio Investidor
-                        </button>
+                    <!-- Mock de imagem dentro do card (usando a logo como placeholder visual) -->
+                    <div class="w-full h-40 bg-white rounded-sm mb-6 flex items-center justify-center p-4">
+                        <img src="{{ url_for('static', filename='img/logo.png') }}" class="h-full object-contain opacity-80" alt="Detalhe">
                     </div>
-
-                    <!-- Prova Social / Status -->
-                    <div class="mt-12 flex items-center justify-center lg:justify-start gap-4 text-sm text-gray-500 font-medium">
-                        <div class="flex -space-x-3">
-                            <div class="w-10 h-10 rounded-full border-2 border-darker bg-gray-800"></div>
-                            <div class="w-10 h-10 rounded-full border-2 border-darker bg-gray-700"></div>
-                            <div class="w-10 h-10 rounded-full border-2 border-darker bg-grena flex items-center justify-center text-white text-xs">+</div>
-                        </div>
-                        <p>Junte-se a centenas de sócios fundadores.</p>
-                    </div>
+                    <p class="text-sm font-medium text-gray-200 mb-8">Precisão. Tradição. Cada detalhe importa no novo manto.</p>
+                    <a href="#" class="text-ouro font-bold text-sm uppercase flex justify-between items-center hover:text-white transition-colors">
+                        Explorar <span class="text-lg">&nearr;</span>
+                    </a>
                 </div>
-
-                <!-- Coluna Direita: Imagem do Produto -->
-                <div class="lg:col-span-6 relative flex justify-center lg:justify-end">
-                    <!-- Palco da Imagem -->
-                    <div class="relative w-full max-w-lg aspect-square flex items-center justify-center">
-                        <!-- Círculos de fundo para destacar a camisa -->
-                        <div class="absolute inset-0 bg-gradient-to-tr from-grena/10 to-ouro/5 rounded-full blur-2xl"></div>
-                        <div class="absolute inset-4 border border-white/5 rounded-full"></div>
-                        <div class="absolute inset-12 border border-white/5 rounded-full"></div>
-
-                        <!-- Imagem da Camiseta flutuante -->
-                        <img
-                            src="{{ url_for('static', filename='img/camiseta_frente.png') }}"
-                            alt="Manto Oficial Sport Club Genus"
-                            class="relative z-10 w-full h-auto object-contain animate-float drop-shadow-[0_30px_30px_rgba(0,0,0,0.8)]"
-                        >
-                    </div>
-                </div>
-
             </div>
         </div>
-    </main>
+    </header>
 
-</body>
-</html>
+    <!-- Seção Dark: Sócio Investidor vs Torcedor -->
+    <section class="bg-dark text-white pt-32 pb-24 px-6 md:px-12 relative overflow-hidden mt-20">
+        <div class="max-w-7xl mx-auto">
+
+            <!-- Tipografia Gigante de Fundo/Topo -->
+            <h2 class="font-display text-[100px] md:text-[180px] leading-[0.8] uppercase tracking-tighter text-outline-dark mb-16 opacity-80">
+                RAÇA<br>
+                <span class="text-white">GENUS</span>
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Card Sócio Torcedor -->
+                <div class="group relative overflow-hidden bg-zinc-900 p-8 min-h-[350px] flex flex-col justify-end border border-zinc-800 hover:border-grena transition-colors">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-10"></div>
+                    <!-- Usando cor sólida como placeholder para foto, substitua por <img> real depois -->
+                    <div class="absolute inset-0 bg-grena/20 group-hover:scale-105 transition-transform duration-700"></div>
+
+                    <div class="relative z-20">
+                        <span class="text-xs font-bold text-gray-400 uppercase tracking-widest block mb-2">Acesso e Paixão</span>
+                        <h3 class="font-display text-3xl uppercase leading-tight mb-4">Sócio Torcedor:<br>A Força da Arquibancada</h3>
+                        <p class="text-sm text-gray-400 max-w-sm">Ingressos garantidos, camisa oficial exclusiva e descontos na rede parceira. Viva o Genus de perto.</p>
+                    </div>
+                </div>
+
+                <!-- Card Sócio Investidor -->
+                <div class="group relative overflow-hidden bg-zinc-900 p-8 min-h-[350px] flex flex-col justify-end border border-zinc-800 hover:border-ouro transition-colors">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-10"></div>
+                    <div class="absolute inset-0 bg-ouro/10 group-hover:scale-105 transition-transform duration-700"></div>
+
+                    <div class="relative z-20">
+                        <span class="text-xs font-bold text-ouro uppercase tracking-widest block mb-2">Retorno e Governança</span>
+                        <h3 class="font-display text-3xl uppercase leading-tight mb-4">Sócio Investidor:<br>O Futuro do Clube</h3>
+                        <p class="text-sm text-gray-400 max-w-sm">Adquira cotas, tenha poder de voto nas decisões da diretoria e participe dos resultados financeiros do clube.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção de Benefícios (Background Estilo Imagem Full-Width) -->
+    <section class="bg-stadium w-full py-24 px-6 md:px-12 relative flex items-center min-h-[600px]">
+        <div class="max-w-7xl mx-auto w-full flex justify-end">
+
+            <!-- Floating White Box (Baseado no "This Month's Best Ski Events") -->
+            <div class="bg-white text-dark p-8 md:p-12 rounded-sm shadow-2xl w-full max-w-2xl relative">
+
+                <!-- Ícone Verde de Seta no canto superior direito -->
+                <div class="absolute -top-6 -right-6 w-16 h-16 bg-[#b2f000] rounded-full flex justify-center items-center shadow-lg text-dark">
