@@ -1,17 +1,21 @@
+import os
 import firebase_admin
 from firebase_admin import credentials
-from flask import Flask, jsonify
 from flask import Flask, jsonify, render_template
+from dotenv import load_dotenv
 
-# 1. Inicializa o Firebase PRIMEIRO
+# Carrega as variáveis do .env local (no servidor, as variáveis do painel têm prioridade)
+load_dotenv()
+
 if not firebase_admin._apps:
-    cred = credentials.Certificate("firebase-key.json")
+    # Lê o caminho da nuvem, ou usa o local por padrão
+    caminho_firebase = os.getenv("FIREBASE_CREDENTIALS_PATH", "firebase-key.json")
+    cred = credentials.Certificate(caminho_firebase)
     firebase_admin.initialize_app(cred)
 
-# 2. Somente AGORA importa as rotas que dependem do banco
 from rotas.adesao import adesao_bp
 
-# 3. Cria e configura o app Flask
+
 app = Flask(__name__)
 app.register_blueprint(adesao_bp)
 
