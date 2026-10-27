@@ -9,63 +9,123 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: { grena: '#7A1220', ouro: '#FFD000' }
+                    colors: {
+                        grena: '#7A1220',
+                        ouro: '#FFD000',
+                        escuro: '#0f172a'
+                    }
                 }
             }
         }
     </script>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
-    <!-- Navbar -->
-    <nav class="bg-grena shadow-lg border-b-4 border-ouro">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-24">
-                <div class="flex items-center gap-4">
-                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Escudo Sport Club Genus" class="h-20 drop-shadow-md">
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen selection:bg-grena selection:text-white">
+
+    <!-- Navbar Flutuante (Estilo Pill) -->
+    <div class="fixed w-full top-6 z-50 px-4 flex justify-center">
+        <nav class="bg-escuro text-white rounded-full px-3 py-2 flex items-center justify-between w-full max-w-5xl shadow-2xl border border-gray-800 backdrop-blur-md bg-opacity-95">
+
+            <!-- Logo Circular -->
+            <div class="bg-white rounded-full p-2 h-12 w-12 flex items-center justify-center shadow-inner">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo Genus" class="h-8 object-contain">
+            </div>
+
+            <!-- Links Desktop -->
+            <div class="hidden md:flex space-x-8 text-sm font-medium text-gray-300">
+                <a href="#" class="hover:text-white transition-colors duration-300">Início</a>
+                <a href="#" class="hover:text-white transition-colors duration-300">A História</a>
+                <a href="#" class="hover:text-white transition-colors duration-300">Planos</a>
+                <a href="#" class="hover:text-white transition-colors duration-300">Contato</a>
+            </div>
+
+            <!-- Botão CTA Desktop -->
+            <div class="hidden md:block">
+                <a href="#" class="bg-white text-escuro text-sm font-bold px-6 py-2.5 rounded-full hover:bg-ouro hover:text-grena transition-all duration-300 shadow-sm flex items-center gap-2">
+                    Área do Sócio
+                </a>
+            </div>
+
+            <!-- Toggle Mobile -->
+            <button id="mobile-btn" class="md:hidden bg-gray-800 p-2 rounded-full text-gray-300 hover:text-white focus:outline-none mr-1">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Menu Mobile Dropdown (Oculto por padrão) -->
+    <div id="mobile-menu" class="hidden fixed inset-0 z-40 bg-gray-50/95 backdrop-blur-sm flex justify-center items-start pt-32 px-4">
+        <div class="bg-escuro w-full max-w-sm rounded-3xl p-8 flex flex-col space-y-6 text-center shadow-2xl border border-gray-800">
+            <button id="close-menu" class="absolute top-6 right-6 bg-white text-escuro rounded-full p-2 text-xs font-bold shadow-md">
+                Fechar ✕
+            </button>
+            <a href="#" class="text-gray-300 hover:text-white text-lg font-medium">Início</a>
+            <a href="#" class="text-gray-300 hover:text-white text-lg font-medium">A História</a>
+            <a href="#" class="text-gray-300 hover:text-white text-lg font-medium">Planos</a>
+            <a href="#" class="text-gray-300 hover:text-white text-lg font-medium">Contato</a>
+            <div class="pt-4">
+                <a href="#" class="bg-white text-escuro font-bold px-8 py-3 rounded-full hover:bg-ouro block w-full">Área do Sócio</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section Minimalista -->
+    <main class="pt-36 pb-20 min-h-screen flex items-center relative overflow-hidden">
+        <!-- Elemento de fundo sutil -->
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-grena rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob"></div>
+        <div class="absolute top-40 left-0 -ml-20 w-72 h-72 bg-ouro rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-2000"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-8 items-center">
+
+                <!-- Textos e CTA -->
+                <div class="space-y-8 text-center md:text-left">
+                    <div class="inline-flex items-center px-4 py-1.5 rounded-full bg-red-100 text-grena font-semibold text-xs tracking-widest uppercase shadow-sm border border-red-200">
+                        <span class="w-1.5 h-1.5 rounded-full bg-grena mr-2 animate-pulse"></span>
+                        Temporada 2026
+                    </div>
+
+                    <h1 class="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tight leading-[1.1]">
+                        O Furacão <br>
+                        <span class="text-grena">do Madeira</span>
+                    </h1>
+
+                    <p class="text-lg text-gray-500 max-w-lg mx-auto md:mx-0 leading-relaxed font-light">
+                        Garanta sua cota no novo programa de sócios. Apoie o maior da capital, tenha acesso a benefícios exclusivos e adquira o novo manto oficial.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-2">
+                        <button class="bg-grena text-white font-semibold px-8 py-3.5 rounded-full shadow-lg hover:bg-red-900 transition-all hover:-translate-y-1 hover:shadow-xl">
+                            Sócio Torcedor
+                        </button>
+                        <button class="bg-white text-gray-800 border border-gray-200 font-semibold px-8 py-3.5 rounded-full shadow-sm hover:border-grena hover:text-grena transition-all hover:-translate-y-1">
+                            Sócio Investidor
+                        </button>
+                    </div>
                 </div>
-                <span class="text-ouro font-black text-2xl uppercase tracking-widest hidden sm:block">
-                    O Furacão do Madeira
-                </span>
+
+                <!-- Imagem do Manto (Flutuante) -->
+                <div class="relative flex justify-center mt-8 md:mt-0">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-grena/20 to-ouro/20 rounded-full blur-3xl scale-75"></div>
+                    <img src="{{ url_for('static', filename='img/camiseta.png') }}" alt="Camiseta Genus 2026" class="relative z-10 w-full max-w-md drop-shadow-2xl transform hover:scale-105 transition duration-700 ease-out">
+                </div>
+
             </div>
         </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 flex flex-col md:flex-row items-center gap-12">
-
-        <!-- Bloco de Texto e Botões -->
-        <div class="md:w-1/2 flex flex-col justify-center text-center md:text-left">
-            <div class="inline-block bg-ouro text-grena font-bold px-4 py-1 rounded-full text-sm mb-6 self-center md:self-start uppercase tracking-wide shadow-sm">
-                Plataforma Oficial
-            </div>
-            <h1 class="text-4xl md:text-6xl font-extrabold text-grena leading-tight mb-6">
-                Faça parte da história do <span class="text-ouro drop-shadow-sm">Genus</span>
-            </h1>
-            <p class="text-lg text-gray-600 mb-8 leading-relaxed">
-                Garanta sua cota no novo programa de sócios. Apoie o maior da capital, tenha acesso a benefícios exclusivos e adquira o novo manto oficial da temporada 2026.
-            </p>
-
-            <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                <button class="bg-grena hover:bg-red-900 text-white font-bold py-4 px-8 rounded-lg shadow-lg transition-transform transform hover:-translate-y-1">
-                    Seja Sócio Torcedor
-                </button>
-                <button class="bg-white border-2 border-ouro hover:bg-yellow-50 text-grena font-bold py-4 px-8 rounded-lg shadow-lg transition-transform transform hover:-translate-y-1">
-                    Seja Sócio Investidor
-                </button>
-            </div>
-        </div>
-
-        <!-- Bloco da Imagem da Camiseta -->
-        <div class="md:w-1/2 flex justify-center relative">
-            <div class="absolute inset-0 bg-grena opacity-5 rounded-full blur-3xl transform scale-90"></div>
-            <img src="{{ url_for('static', filename='img/camiseta_frente.png') }}" alt="Nova Camiseta Genus 2026" class="relative w-full max-w-md rounded-2xl shadow-2xl border border-gray-200 hover:scale-105 transition-transform duration-500 bg-white">
-        </div>
-
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-400 py-8 text-center mt-auto">
-        <p>&copy; 2026 Sport Club Genus. Todos os direitos reservados.</p>
-    </footer>
+    <!-- Script para o Menu Mobile -->
+    <script>
+        const btn = document.getElementById('mobile-btn');
+        const closeBtn = document.getElementById('close-menu');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.remove('hidden');
+        });
+
+        closeBtn.addEventListener('click', () => {
+            menu.classList.add('hidden');
+        });
+    </script>
 </body>
 </html>
