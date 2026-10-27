@@ -7,17 +7,65 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
-            theme: { extend: { colors: { grena: '#7A1220', ouro: '#FFD000' } } }
+            theme: {
+                extend: {
+                    colors: { grena: '#7A1220', ouro: '#FFD000' }
+                }
+            }
         }
     </script>
 </head>
-<body class="bg-gray-100 flex items-center justify-center h-screen">
-    <div class="text-center px-4">
-        <h1 class="text-5xl font-bold text-grena mb-2">Sport Club Genus</h1>
-        <p class="text-2xl text-gray-700 mb-8">O Furacão do Madeira</p>
-        <div class="inline-block bg-grena text-ouro font-semibold py-3 px-6 rounded-lg shadow-lg">
-            Plataforma Sócio-Torcedor em Desenvolvimento
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
+    <!-- Navbar -->
+    <nav class="bg-grena shadow-lg border-b-4 border-ouro">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-24">
+                <div class="flex items-center gap-4">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Escudo Sport Club Genus" class="h-20 drop-shadow-md">
+                </div>
+                <span class="text-ouro font-black text-2xl uppercase tracking-widest hidden sm:block">
+                    O Furacão do Madeira
+                </span>
+            </div>
         </div>
-    </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 flex flex-col md:flex-row items-center gap-12">
+
+        <!-- Bloco de Texto e Botões -->
+        <div class="md:w-1/2 flex flex-col justify-center text-center md:text-left">
+            <div class="inline-block bg-ouro text-grena font-bold px-4 py-1 rounded-full text-sm mb-6 self-center md:self-start uppercase tracking-wide shadow-sm">
+                Plataforma Oficial
+            </div>
+            <h1 class="text-4xl md:text-6xl font-extrabold text-grena leading-tight mb-6">
+                Faça parte da história do <span class="text-ouro drop-shadow-sm">Genus</span>
+            </h1>
+            <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+                Garanta sua cota no novo programa de sócios. Apoie o maior da capital, tenha acesso a benefícios exclusivos e adquira o novo manto oficial da temporada 2026.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                <button class="bg-grena hover:bg-red-900 text-white font-bold py-4 px-8 rounded-lg shadow-lg transition-transform transform hover:-translate-y-1">
+                    Seja Sócio Torcedor
+                </button>
+                <button class="bg-white border-2 border-ouro hover:bg-yellow-50 text-grena font-bold py-4 px-8 rounded-lg shadow-lg transition-transform transform hover:-translate-y-1">
+                    Seja Sócio Investidor
+                </button>
+            </div>
+        </div>
+
+        <!-- Bloco da Imagem da Camiseta -->
+        <div class="md:w-1/2 flex justify-center relative">
+            <div class="absolute inset-0 bg-grena opacity-5 rounded-full blur-3xl transform scale-90"></div>
+            <img src="{{ url_for('static', filename='img/camiseta_frente.png') }}" alt="Nova Camiseta Genus 2026" class="relative w-full max-w-md rounded-2xl shadow-2xl border border-gray-200 hover:scale-105 transition-transform duration-500 bg-white">
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-8 text-center mt-auto">
+        <p>&copy; 2026 Sport Club Genus. Todos os direitos reservados.</p>
+    </footer>
 </body>
 </html>
