@@ -28,24 +28,40 @@
         }
     </script>
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
         .text-outline {
             color: transparent;
             -webkit-text-stroke: 2px #f3f4f6;
         }
-        /* CORRIGIDO: Contorno semi-transparente claro para brilhar no fundo escuro */
+
         .text-outline-dark {
             color: transparent;
             -webkit-text-stroke: 2px rgba(255, 255, 255, 0.2);
         }
-        /* Configuração do Carrossel */
+
         .carousel-track {
             display: flex;
             transition: transform 0.5s ease-in-out;
             width: 300%;
         }
+
         .carousel-slide {
             width: 33.333%;
             flex-shrink: 0;
+        }
+
+        @media (max-width: 767px) {
+            .text-outline-dark {
+                -webkit-text-stroke-width: 1px;
+            }
         }
     </style>
 </head>
@@ -55,70 +71,86 @@
     <header class="w-full sticky top-0 z-50 shadow-2xl">
 
         <!-- 1. Barra Principal (Navegação) -->
-        <nav class="w-full bg-darker h-20 px-6 md:px-12 flex justify-between items-center relative z-20">
+        <nav class="w-full bg-darker h-20 px-4 sm:px-6 md:px-12 flex justify-between items-center relative z-20">
 
-            <!-- Logo Flutuante Gigante (CORRIGIDA COM GLOW BRANCO PARA REVELAR TEXTO PRETO) -->
-            <div class="absolute left-6 md:left-12 top-2 z-[60]">
+            <!-- Logo Flutuante Gigante -->
+            <div class="absolute left-4 sm:left-6 md:left-12 top-2 z-[60]">
                 <a href="#">
-                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo Genus" class="w-40 md:w-56 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] drop-shadow-[0_0_3px_rgba(255,255,255,0.6)] hover:scale-105 transition-transform duration-300 origin-top-left">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo Genus" class="w-24 sm:w-32 md:w-56 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] drop-shadow-[0_0_3px_rgba(255,255,255,0.6)] hover:scale-105 transition-transform duration-300 origin-top-left">
                 </a>
             </div>
 
-            <!-- Espaçador para empurrar o menu para o centro/direita devido à logo -->
-            <div class="w-32 md:w-48 hidden md:block"></div>
+            <!-- Espaçador para respeitar a logo -->
+            <div class="w-24 sm:w-32 md:w-48 shrink-0"></div>
 
             <!-- Links Centrais -->
-            <div class="hidden md:flex space-x-12 text-sm font-bold text-gray-300 tracking-wider uppercase">
+            <div class="hidden md:flex space-x-8 lg:space-x-12 text-sm font-bold text-gray-300 tracking-wider uppercase">
                 <a href="#historia" class="hover:text-ouro transition-colors">O Clube</a>
                 <a href="#planos" class="hover:text-ouro transition-colors">Planos</a>
                 <a href="/planos" class="text-ouro border-b-2 border-ouro pb-1 hover:text-white transition-colors">Ingressos / Planos</a>
                 <a href="#vantagens" class="hover:text-ouro transition-colors">Vantagens</a>
             </div>
 
-            <!-- Botão Área do Sócio -->
-            <div class="flex items-center z-10">
-                <a href="#" class="text-sm font-bold flex items-center gap-2 bg-zinc-900 hover:bg-grena text-white px-6 py-2.5 rounded-sm transition-all duration-300 border border-zinc-700 hover:border-grena">
-                    <span class="w-2.5 h-2.5 rounded-full bg-ouro block animate-pulse"></span>
+            <!-- Botão Área do Sócio + Hambúrguer -->
+            <div class="flex items-center z-10 ml-auto">
+                <a href="#" class="text-xs sm:text-sm font-bold flex items-center gap-2 bg-zinc-900 hover:bg-grena text-white px-3 sm:px-5 md:px-6 py-2.5 rounded-sm transition-all duration-300 border border-zinc-700 hover:border-grena whitespace-nowrap">
+                    <span class="w-2.5 h-2.5 rounded-full bg-ouro block animate-pulse shrink-0"></span>
                     Área do Sócio
                 </a>
+
+                <!-- Botão Hambúrguer (somente mobile) -->
+                <button id="hamburger-btn" onclick="toggleMenu()" class="md:hidden ml-2 sm:ml-3 p-2 text-gray-300 hover:text-ouro transition-colors" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="mobile-menu">
+                    <svg id="icon-abrir" class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    <svg id="icon-fechar" class="w-7 h-7 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <!-- Menu Mobile (Dropdown) -->
+            <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-darker border-t border-zinc-800 shadow-2xl z-50">
+                <div class="flex flex-col py-2 text-sm font-bold text-gray-300 tracking-wider uppercase">
+                    <a href="#historia" onclick="fecharMenu()" class="px-6 py-4 hover:bg-zinc-900 hover:text-ouro transition-colors border-b border-zinc-800/60">O Clube</a>
+                    <a href="#planos" onclick="fecharMenu()" class="px-6 py-4 hover:bg-zinc-900 hover:text-ouro transition-colors border-b border-zinc-800/60">Planos</a>
+                    <a href="/planos" onclick="fecharMenu()" class="px-6 py-4 text-ouro hover:bg-zinc-900 transition-colors border-b border-zinc-800/60">Ingressos / Planos</a>
+                    <a href="#vantagens" onclick="fecharMenu()" class="px-6 py-4 hover:bg-zinc-900 hover:text-ouro transition-colors">Vantagens</a>
+                </div>
             </div>
         </nav>
 
         <!-- 2. Barra Secundária (Próximos Jogos - Estilo Corinthians) -->
-        <div class="w-full bg-zinc950 border-b border-zinc-800 h-12 flex items-center justify-between px-6 text-xs text-gray-400 font-semibold relative z-10">
+        <div class="w-full bg-zinc950 border-b border-zinc-800 min-h-12 flex items-center justify-between px-2 sm:px-6 text-xs text-gray-400 font-semibold relative z-10">
 
-            <!-- Espaçador para respeitar a logo vazada à esquerda -->
-            <div class="w-32 md:w-48 hidden md:block"></div>
+            <!-- Espaçador para desktop respeitar a logo -->
+            <div class="w-32 md:w-48 hidden md:block shrink-0"></div>
 
             <!-- Container do Ticker de Jogos -->
-            <div class="flex-grow flex items-center justify-center gap-8 md:gap-16">
+            <div class="flex-grow flex items-center justify-center gap-1 sm:gap-4 md:gap-16 min-w-0">
                 <!-- Botão Anterior -->
-                <button onclick="mudarJogo(-1)" class="p-2 hover:text-white transition-colors">
+                <button onclick="mudarJogo(-1)" class="p-2 hover:text-white transition-colors shrink-0" aria-label="Jogo anterior">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"></path></svg>
                 </button>
 
                 <!-- Informações do Jogo (Geradas via JS) -->
-                <div id="jogo-container" class="flex flex-col md:flex-row items-center gap-2 md:gap-8 min-w-[300px] md:min-w-[600px] justify-center transition-opacity duration-300">
+                <div id="jogo-container" class="flex flex-col sm:flex-row md:flex-row items-center gap-1 sm:gap-4 md:gap-8 w-full max-w-[720px] justify-center transition-opacity duration-300 min-w-0 text-center">
 
-                    <div class="flex flex-col items-center md:items-end text-[10px] md:text-xs">
-                        <span class="text-ouro tracking-widest uppercase">Próxima Partida</span>
+                    <div class="flex flex-col items-center sm:items-end text-[10px] md:text-xs min-w-0">
+                        <span class="text-ouro tracking-widest uppercase whitespace-nowrap">Próxima Partida</span>
                         <span id="jogo-campeonato" class="uppercase hidden md:block">Carregando...</span>
                     </div>
 
-                    <div class="flex items-center gap-4 text-white font-bold text-sm md:text-base">
-                        <span id="jogo-mandante" class="uppercase">...</span>
-                        <span class="text-zinc-600 text-xs font-normal">X</span>
-                        <span id="jogo-visitante" class="uppercase">...</span>
+                    <div class="flex items-center gap-2 sm:gap-4 text-white font-bold text-xs sm:text-sm md:text-base min-w-0">
+                        <span id="jogo-mandante" class="uppercase truncate max-w-[92px] sm:max-w-[140px] md:max-w-none">...</span>
+                        <span class="text-zinc-600 text-xs font-normal shrink-0">X</span>
+                        <span id="jogo-visitante" class="uppercase truncate max-w-[92px] sm:max-w-[140px] md:max-w-none">...</span>
                     </div>
 
-                    <div class="flex flex-col items-center md:items-start text-[10px] md:text-xs text-zinc-500">
-                        <span id="jogo-datahora">...</span>
+                    <div class="flex flex-col items-center sm:items-start text-[10px] md:text-xs text-zinc-500 min-w-0">
+                        <span id="jogo-datahora" class="whitespace-nowrap">...</span>
                         <span id="jogo-local" class="hidden md:block">...</span>
                     </div>
                 </div>
 
                 <!-- Botão Próximo -->
-                <button onclick="mudarJogo(1)" class="p-2 hover:text-white transition-colors">
+                <button onclick="mudarJogo(1)" class="p-2 hover:text-white transition-colors shrink-0" aria-label="Próximo jogo">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path></svg>
                 </button>
             </div>
@@ -129,98 +161,68 @@
     <div class="h-6 w-full bg-[#f8f9fa]"></div>
 
     <!-- Carrossel de Imagens -->
-    <section class="w-full max-w-7xl mx-auto px-6 md:px-12 mb-20 relative overflow-hidden mt-6">
-        <div class="relative w-full h-[400px] md:h-[550px] rounded-sm overflow-hidden group shadow-2xl">
+    <section class="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-12 mb-16 md:mb-20 relative overflow-hidden mt-6">
+        <div class="relative w-full h-[380px] sm:h-[440px] md:h-[550px] rounded-sm overflow-hidden group shadow-2xl">
             <div id="carousel" class="carousel-track h-full">
                 <div class="carousel-slide h-full relative bg-zinc-800">
                     <img src="https://images.unsplash.com/photo-1508344928928-7137b29de218?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover opacity-80" alt="Estádio Lotado">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
-                    <div class="absolute bottom-10 left-10 text-white">
-                        <span class="text-ouro font-bold text-sm tracking-widest uppercase mb-2 block">A Força de Rondônia</span>
-                        <h2 class="font-display text-4xl md:text-5xl uppercase drop-shadow-lg">O Caldeirão<br>Aluizão</h2>
+                    <div class="absolute bottom-8 sm:bottom-10 left-6 sm:left-10 right-6 text-white text-center sm:text-left">
+                        <span class="text-ouro font-bold text-xs sm:text-sm tracking-widest uppercase mb-2 block">A Força de Rondônia</span>
+                        <h2 class="font-display text-4xl md:text-5xl uppercase drop-shadow-lg leading-tight">O Caldeirão<br>Aluizão</h2>
                     </div>
                 </div>
+
                 <div class="carousel-slide h-full relative bg-zinc-800">
                     <img src="https://images.unsplash.com/photo-1574629810360-7efbb6b49987?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover opacity-80" alt="Jogador comemorando">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
-                    <div class="absolute bottom-10 left-10 text-white">
-                        <span class="text-ouro font-bold text-sm tracking-widest uppercase mb-2 block">Nova Temporada</span>
-                        <h2 class="font-display text-4xl md:text-5xl uppercase drop-shadow-lg">Garra e<br>Determinação</h2>
+                    <div class="absolute bottom-8 sm:bottom-10 left-6 sm:left-10 right-6 text-white text-center sm:text-left">
+                        <span class="text-ouro font-bold text-xs sm:text-sm tracking-widest uppercase mb-2 block">Nova Temporada</span>
+                        <h2 class="font-display text-4xl md:text-5xl uppercase drop-shadow-lg leading-tight">Garra e<br>Determinação</h2>
                     </div>
                 </div>
+
                 <div class="carousel-slide h-full relative bg-zinc-800">
                     <img src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover opacity-80" alt="Torcida">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
-                    <div class="absolute bottom-10 left-10 text-white">
-                        <span class="text-ouro font-bold text-sm tracking-widest uppercase mb-2 block">A Maior Torcida</span>
-                        <h2 class="font-display text-4xl md:text-5xl uppercase drop-shadow-lg">O Furacão<br>do Madeira</h2>
+                    <div class="absolute bottom-8 sm:bottom-10 left-6 sm:left-10 right-6 text-white text-center sm:text-left">
+                        <span class="text-ouro font-bold text-xs sm:text-sm tracking-widest uppercase mb-2 block">A Maior Torcida</span>
+                        <h2 class="font-display text-4xl md:text-5xl uppercase drop-shadow-lg leading-tight">O Furacão<br>do Madeira</h2>
                     </div>
                 </div>
             </div>
 
-            <button onclick="moveSlide(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-grena text-white w-12 h-12 flex items-center justify-center rounded-full transition-colors backdrop-blur-sm border border-white/10">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            <button onclick="moveSlide(-1)" class="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-grena text-white w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full transition-colors backdrop-blur-sm border border-white/10" aria-label="Slide anterior">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
             </button>
-            <button onclick="moveSlide(1)" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-grena text-white w-12 h-12 flex items-center justify-center rounded-full transition-colors backdrop-blur-sm border border-white/10">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+
+            <button onclick="moveSlide(1)" class="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-grena text-white w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full transition-colors backdrop-blur-sm border border-white/10" aria-label="Próximo slide">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
             </button>
         </div>
     </section>
 
-    <!-- SÓCIO-INVESTIDOR (NEGÓCIOS) -->
-    <div class="text-center mb-8">
-        <h2 class="font-display text-4xl sm:text-5xl uppercase text-white mb-4">Sócio-Investidor Genus</h2>
-        <p class="text-gray-500 text-sm max-w-2xl mx-auto">Parceria de negócios de alto impacto. Retorno financeiro via dividendos anuais, sorteios globais milionários e as melhores experiências de hospitalidade esportiva.</p>
-    </div>
-
-    <div class="w-full bg-gradient-to-br from-zinc-900 to-black border border-ouro/40 rounded-sm p-1 relative overflow-hidden group hover:border-ouro transition-colors shadow-[0_0_30px_rgba(255,208,0,0.05)]">
-
-        <div class="absolute inset-0 bg-investor pointer-events-none"></div>
-
-        <div class="bg-darker/90 backdrop-blur-sm p-5 sm:p-8 lg:p-12 relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-12">
-
-            <!-- Bloco Esquerdo (Preço e Botão) -->
-            <div class="lg:w-1/3 text-left w-full">
-                <div class="inline-flex items-center gap-2 px-3 py-1 bg-ouro/10 border border-ouro/20 rounded-sm mb-6">
-                    <span class="w-2 h-2 rounded-full bg-ouro animate-pulse block"></span>
-                    <span class="text-[10px] font-bold text-ouro uppercase tracking-widest">Hard Cap: 2.000 Cotas (Global)</span>
-                </div>
-
-                <h3 class="font-display text-5xl sm:text-6xl uppercase text-white mb-2 leading-none">
-                    O Futuro<br>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-ouro to-yellow-300">Em Suas Mãos</span>
-                </h3>
-
-                <div class="flex items-end gap-2 mt-8 mb-8 flex-wrap">
-                    <span class="text-gray-400 text-lg font-bold">R$</span>
-                    <span class="text-white font-display text-6xl sm:text-7xl">100<span class="text-3xl">,00</span></span>
-                    <span class="text-gray-400 text-sm">/ cota ao mês</span>
-                </div>
-
-                <button class="w-full bg-ouro hover:bg-yellow-500 text-dark font-bold py-4 uppercase text-sm tracking-wide rounded-sm transition-transform transform hover:scale-105 shadow-[0_0_20px_rgba(255,208,0,0.3)]">
-                    Reservar Minhas Cotas
-                </button>
-            </div>
-
-            <!-- Bloco Direito (Vantagens do Investidor) -->
-            <div class="lg:w-2/3 w-full grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6 text-left">
-    <section id="historia" class="w-full max-w-7xl mx-auto px-6 md:px-12 pb-24">
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+    <!-- O Clube (Resumo Histórico) -->
+    <section id="historia" class="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-12 pb-20 md:pb-24">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-12 items-center">
             <div class="md:col-span-5 relative">
-                <div class="absolute -left-10 top-10 text-[150px] font-display text-gray-200 opacity-50 z-0">1981</div>
-                <div class="relative z-10">
+                <div class="absolute left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0 md:-ml-4 top-10 text-[95px] sm:text-[130px] md:text-[150px] font-display text-gray-200 opacity-50 z-0">1981</div>
+                <div class="relative z-10 text-center md:text-left">
                     <span class="text-grena font-bold text-sm tracking-widest uppercase mb-4 block">História e Tradição</span>
                     <h2 class="font-display text-5xl md:text-7xl uppercase leading-tight mb-6 text-dark">A Força<br>da Capital</h2>
-                    <div class="w-20 h-2 bg-ouro mb-8"></div>
+                    <div class="w-20 h-2 bg-ouro mb-8 mx-auto md:mx-0"></div>
                 </div>
             </div>
-            <div class="md:col-span-7 relative z-10">
-                <p class="text-gray-600 text-lg mb-6 leading-relaxed">
+
+            <div class="md:col-span-7 relative z-10 text-center md:text-left">
+                <p class="text-gray-600 text-base sm:text-lg mb-6 leading-relaxed">
                     Fundado em <span class="font-bold text-dark">15 de novembro de 1981</span>, o <b>Sport Club Genus de Porto Velho</b> carrega as cores Amarelo e Grená com orgulho. Conhecido carinhosamente como o <span class="text-grena font-bold">"Furacão do Madeira"</span>, somos o clube mais tradicional em atividade na capital do estado de Rondônia.
                 </p>
-                <p class="text-gray-600 text-lg mb-8 leading-relaxed">
+
+                <p class="text-gray-600 text-base sm:text-lg mb-8 leading-relaxed">
                     Mandamos nossos jogos no histórico <b>Estádio Aluízio Ferreira (Aluizão)</b>, palco de grandes batalhas e casa da nossa torcida apaixonada. O clube conquistou a glória máxima ao sagrar-se <b>Campeão Rondoniense em 2015</b>, consolidando seu nome na história do futebol local e representando orgulhosamente o estado em competições nacionais.
                 </p>
+
                 <a href="#" class="inline-flex items-center gap-2 text-dark font-bold border-b-2 border-grena pb-1 hover:text-grena transition-colors">
                     Conheça o Estatuto Oficial &rarr;
                 </a>
@@ -229,29 +231,36 @@
     </section>
 
     <!-- Apresentação do Manto -->
-    <header class="relative w-full max-w-7xl mx-auto px-6 md:px-12 pb-32">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start relative bg-white shadow-xl p-10 md:p-16 rounded-sm border border-gray-100">
-            <div class="z-10 pt-4">
+    <header class="relative w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-12 pb-24 md:pb-32">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12 items-start relative bg-white shadow-xl p-6 sm:p-10 md:p-16 rounded-sm border border-gray-100">
+            <div class="z-10 pt-4 text-center md:text-left">
                 <span class="inline-block py-1 px-3 bg-dark text-white text-xs font-bold tracking-widest uppercase mb-6 rounded-sm">Novo Lançamento</span>
-                <h1 class="font-display text-6xl md:text-[90px] leading-[0.85] text-dark uppercase tracking-tight mb-8">
+
+                <h1 class="font-display text-6xl sm:text-7xl md:text-[90px] leading-[0.85] text-dark uppercase tracking-tight mb-8">
                     Vista o<br>
                     <span class="text-grena">Poder</span>
                 </h1>
-                <p class="text-gray-600 text-lg font-medium max-w-md mb-8">
+
+                <p class="text-gray-600 text-base sm:text-lg font-medium max-w-md mb-8 mx-auto md:mx-0">
                     O novo manto oficial da temporada 2026. Design exclusivo, tecnologia de ponta e a tradição que impõe respeito em qualquer campo.
                 </p>
-                <button class="bg-ouro hover:bg-yellow-400 text-dark font-bold text-sm uppercase px-8 py-4 rounded-sm transition-colors shadow-lg">
+
+                <button class="w-full sm:w-auto bg-ouro hover:bg-yellow-400 text-dark font-bold text-sm uppercase px-8 py-4 rounded-sm transition-colors shadow-lg">
                     Garantir o Meu Manto &rarr;
                 </button>
             </div>
-            <div class="relative w-full h-[400px] flex justify-center items-center">
+
+            <div class="relative w-full min-h-[440px] md:h-[400px] flex justify-center items-center pb-28 sm:pb-20 md:pb-0">
                 <div class="absolute inset-0 bg-grena/5 rounded-full blur-3xl"></div>
-                <img src="{{ url_for('static', filename='img/camiseta.png') }}" alt="Nova Camisa Genus 2026" class="relative z-10 w-[70%] md:w-[90%] drop-shadow-2xl object-contain hover:scale-105 transition-transform duration-700">
-                <div class="absolute -bottom-10 right-0 bg-grena text-white p-6 w-72 shadow-2xl z-20 rounded-sm">
+
+                <img src="{{ url_for('static', filename='img/camiseta.png') }}" alt="Nova Camisa Genus 2026" class="relative z-10 w-[72%] sm:w-[65%] md:w-[90%] drop-shadow-2xl object-contain hover:scale-105 transition-transform duration-700">
+
+                <div class="absolute bottom-0 sm:-bottom-10 right-0 left-0 sm:left-auto mx-auto sm:mx-0 bg-grena text-white p-6 w-full sm:w-72 shadow-2xl z-20 rounded-sm">
                     <div class="flex items-center gap-3 mb-4">
-                        <svg class="w-6 h-6 text-ouro" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                        <svg class="w-6 h-6 text-ouro shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
                         <h3 class="font-display text-xl uppercase tracking-wide leading-tight">Camisa I<br>2026</h3>
                     </div>
+
                     <p class="text-sm font-medium text-gray-200">Totalmente grátis para Sócios Diamante e Ouro a partir do 6º mês de adimplência.</p>
                 </div>
             </div>
@@ -259,38 +268,52 @@
     </header>
 
     <!-- Seção Dark: Sócio Investidor vs Torcedor -->
-    <section id="planos" class="bg-dark text-white pt-32 pb-24 px-6 md:px-12 relative overflow-hidden">
+    <section id="planos" class="bg-dark text-white pt-24 md:pt-32 pb-20 md:pb-24 px-4 sm:px-6 md:px-12 relative overflow-hidden">
         <div class="max-w-7xl mx-auto">
-            <h2 class="font-display text-[80px] md:text-[140px] leading-[0.8] uppercase tracking-tighter text-outline-dark mb-16 opacity-80">
+            <h2 class="font-display text-[58px] sm:text-[88px] md:text-[140px] leading-[0.85] md:leading-[0.8] uppercase tracking-tighter text-outline-dark mb-12 md:mb-16 opacity-80 text-center md:text-left">
                 A FORÇA<br>
                 <span class="text-white">AURIGRENÁ</span>
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                 <!-- Card Sócio Torcedor -->
-                <div class="group relative overflow-hidden bg-zinc-900 p-10 min-h-[400px] flex flex-col justify-end border border-zinc-800 hover:border-grena transition-colors rounded-sm">
+                <div class="group relative overflow-hidden bg-zinc-900 p-6 sm:p-10 min-h-[360px] md:min-h-[400px] flex flex-col justify-end border border-zinc-800 hover:border-grena transition-colors rounded-sm">
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-10"></div>
                     <div class="absolute inset-0 bg-grena/10 group-hover:bg-grena/20 transition-colors duration-700"></div>
-                    <div class="relative z-20">
+
+                    <div class="relative z-20 text-center md:text-left">
                         <span class="text-xs font-bold text-gray-400 uppercase tracking-widest block mb-2">Sócio Torcedor</span>
+
                         <h3 class="font-display text-4xl uppercase leading-tight mb-4">O Furacão<br>do Madeira</h3>
-                        <p class="text-sm text-gray-400 max-w-sm mb-8 leading-relaxed">Planos sob medida para a sua paixão. Ingressos garantidos, descontos de 10% a 25% na rede parceira e experiências exclusivas com o elenco.</p>
-                        <a href="#" class="inline-flex items-center gap-2 text-ouro font-bold text-sm uppercase hover:text-white transition-colors">
+
+                        <p class="text-sm text-gray-400 max-w-sm mb-8 leading-relaxed mx-auto md:mx-0">
+                            Planos sob medida para a sua paixão. Ingressos garantidos, descontos de 10% a 25% na rede parceira e experiências exclusivas com o elenco.
+                        </p>
+
+                        <a href="/planos" class="inline-flex items-center gap-2 text-ouro font-bold text-sm uppercase hover:text-white transition-colors">
                             Ver Planos e Valores &rarr;
                         </a>
                     </div>
                 </div>
+
                 <!-- Card Sócio Investidor -->
-                <div class="group relative overflow-hidden bg-zinc-900 p-10 min-h-[400px] flex flex-col justify-end border border-zinc-800 hover:border-ouro transition-colors rounded-sm">
+                <div class="group relative overflow-hidden bg-zinc-900 p-6 sm:p-10 min-h-[360px] md:min-h-[400px] flex flex-col justify-end border border-zinc-800 hover:border-ouro transition-colors rounded-sm">
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-10"></div>
                     <div class="absolute inset-0 bg-ouro/5 group-hover:bg-ouro/10 transition-colors duration-700"></div>
-                    <div class="relative z-20">
+
+                    <div class="relative z-20 text-center md:text-left">
                         <div class="inline-flex items-center gap-2 px-3 py-1 bg-ouro/10 border border-ouro/20 rounded-sm mb-4">
                             <span class="w-2 h-2 rounded-full bg-ouro animate-pulse"></span>
                             <span class="text-[10px] font-bold text-ouro uppercase tracking-widest">Hard Cap: 2.000 Cotas</span>
                         </div>
+
                         <h3 class="font-display text-4xl uppercase leading-tight mb-4">Sócio<br>Investidor</h3>
-                        <p class="text-sm text-gray-400 max-w-sm mb-8 leading-relaxed">O futuro em suas mãos. Garanta sua cota por R$ 100/mês, tenha poder de voto nas assembleias e participe na distribuição de resultados do clube.</p>
-                        <a href="#" class="inline-flex items-center gap-2 text-white font-bold text-sm uppercase hover:text-ouro transition-colors">
+
+                        <p class="text-sm text-gray-400 max-w-sm mb-8 leading-relaxed mx-auto md:mx-0">
+                            O futuro em suas mãos. Garanta sua cota por R$ 100/mês, tenha poder de voto nas assembleias e participe na distribuição de resultados do clube.
+                        </p>
+
+                        <a href="/planos#vitrine-planos" class="inline-flex items-center gap-2 text-white font-bold text-sm uppercase hover:text-ouro transition-colors">
                             Reservar Minha Cota &rarr;
                         </a>
                     </div>
@@ -301,6 +324,26 @@
 
     <!-- SCRIPTS DE CARREGAMENTO -->
     <script>
+        // 0. MENU HAMBÚRGUER (MOBILE)
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const btn = document.getElementById('hamburger-btn');
+            const iconAbrir = document.getElementById('icon-abrir');
+            const iconFechar = document.getElementById('icon-fechar');
+
+            const aberto = menu.classList.toggle('hidden') === false;
+            iconAbrir.classList.toggle('hidden', aberto);
+            iconFechar.classList.toggle('hidden', !aberto);
+            btn.setAttribute('aria-expanded', aberto ? 'true' : 'false');
+        }
+
+        function fecharMenu() {
+            document.getElementById('mobile-menu').classList.add('hidden');
+            document.getElementById('icon-abrir').classList.remove('hidden');
+            document.getElementById('icon-fechar').classList.add('hidden');
+            document.getElementById('hamburger-btn').setAttribute('aria-expanded', 'false');
+        }
+
         // 1. CARROSSEL
         let currentSlide = 0;
         const track = document.getElementById('carousel');
@@ -311,7 +354,10 @@
             const offset = -currentSlide * 33.3333;
             track.style.transform = `translateX(${offset}%)`;
         }
-        setInterval(() => { moveSlide(1); }, 5000);
+
+        setInterval(() => {
+            moveSlide(1);
+        }, 5000);
 
         // 2. SISTEMA DE JOGOS (Consumindo a API Flask)
         let jogosAtuais = [];
@@ -337,13 +383,14 @@
         }
 
         function mudarJogo(direcao) {
+            if (jogosAtuais.length === 0) return;
+
             indiceJogoAtual = (indiceJogoAtual + direcao + jogosAtuais.length) % jogosAtuais.length;
             renderizarJogo();
         }
 
         async function carregarJogos() {
             try {
-                // Acessa a API do Flask na mesma raiz
                 const resposta = await fetch('/api/jogos');
                 jogosAtuais = await resposta.json();
                 renderizarJogo();
