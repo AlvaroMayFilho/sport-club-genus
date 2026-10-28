@@ -31,6 +31,10 @@ app.register_blueprint(adesao_bp)
 def index():
     return render_template('index.html')
 
+@app.route('/planos')
+def planos():
+    return render_template('planos.html')
+
 # 2. Rota Backend API (Entrega os dados em JSON)
 @app.route('/api/jogos', methods=['GET'])
 def obter_jogos():

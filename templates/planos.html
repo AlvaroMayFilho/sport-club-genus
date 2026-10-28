@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planos e Ingressos | Sport Club Genus</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Anton', 'sans-serif'] },
+                    colors: {
+                        grena: '#7A1220',
+                        ouro: '#FFD000',
+                        bronze: '#CD7F32',
+                        prata: '#E5E7EB',
+                        diamante: '#8BE9FD',
+                        dark: '#0a0a0a',
+                        darker: '#050505',
+                        zinc950: '#09090b'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .text-outline-dark {
+            color: transparent;
+            -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.4);
+        }
+        .bg-grass {
+            background: linear-gradient(to bottom, #050505, rgba(10, 20, 10, 0.8)), url('https://images.unsplash.com/photo-1518605368461-1e1e38ce8158?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
+        .bg-investor {
+            background: radial-gradient(circle at top right, rgba(255, 208, 0, 0.05) 0%, transparent 60%);
+        }
+    </style>
+</head>
+<body class="bg-darker text-gray-200 font-sans antialiased overflow-x-hidden">
+
+    <!-- NAVBAR PADRÃO -->
+    <header class="w-full sticky top-0 z-50 shadow-2xl">
+        <nav class="w-full bg-darker h-20 px-6 md:px-12 flex justify-between items-center relative z-20 border-b border-zinc-800">
+            <div class="absolute left-6 md:left-12 top-2 z-[60]">
+                <a href="/">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo Genus" class="w-40 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:scale-105 transition-transform duration-300 origin-top-left">
+                </a>
+            </div>
+            <div class="w-32 md:w-48 hidden md:block"></div>
+            <div class="hidden md:flex space-x-12 text-sm font-bold text-gray-300 tracking-wider uppercase items-center">
+                <a href="/" class="hover:text-ouro transition-colors">Início</a>
+                <a href="/planos" class="text-ouro border-b-2 border-ouro pb-1 hover:text-white transition-colors">Ingressos / Planos</a>
+                <a href="#" class="hover:text-ouro transition-colors">Contato</a>
+            </div>
+            <div class="flex items-center z-10">
+                <a href="#" class="text-sm font-bold flex items-center gap-2 bg-zinc-900 hover:bg-grena text-white px-6 py-2.5 rounded-sm transition-all duration-300 border border-zinc-700 hover:border-grena">
+                    <span class="w-2.5 h-2.5 rounded-full bg-ouro block animate-pulse"></span> Área do Sócio
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="w-full py-24 px-6 text-center bg-zinc950 flex flex-col items-center border-b border-zinc-800">
+        <h1 class="font-display text-5xl md:text-7xl uppercase tracking-wide leading-tight mb-6">
+            <span class="text-outline-dark">SUA PAIXÃO PELO GENUS</span><br>
+            <span class="text-white">COMEÇA AQUI!</span>
+        </h1>
+        <p class="text-gray-400 font-medium max-w-2xl text-lg mb-10">
+            Compre seus ingressos, conheça os planos de sócio e viva o Furacão do Madeira de um jeito único.
+        </p>
+        <div class="flex gap-4">
+            <a href="#vitrine-planos" class="bg-ouro hover:bg-yellow-500 text-dark font-bold px-8 py-3 rounded-sm uppercase text-sm transition-colors">
+                Ver Planos
+            </a>
+            <a href="#vitrine-ingressos" class="bg-zinc-800 hover:bg-grena text-white font-bold px-8 py-3 rounded-sm uppercase text-sm transition-colors border border-zinc-700">
+                Comprar Ingressos
+            </a>
+        </div>
+    </section>
+
+    <!-- VITRINE DE INGRESSOS (DINÂMICO VIA API) -->
+    <section id="vitrine-ingressos" class="w-full py-24 bg-grass relative border-b border-zinc-800">
+        <div class="max-w-6xl mx-auto px-6 relative z-10">
+            <div class="flex items-center justify-between border-b border-zinc-700 pb-4 mb-12">
+                <h2 class="font-display text-4xl uppercase text-white">Próximo Jogo</h2>
+                <div class="text-ouro font-bold text-sm uppercase flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse block"></span> Ingressos Liberados
+                </div>
+            </div>
+
+            <!-- Card de Jogo Gerado pelo JS -->
+            <div id="ingresso-container" class="bg-black/60 backdrop-blur-md border border-white/10 p-8 rounded-sm text-center flex flex-col items-center opacity-0 transition-opacity duration-500 shadow-2xl">
+                <span id="ing-campeonato" class="text-ouro font-bold text-xs uppercase tracking-widest mb-6 block">Carregando...</span>
+                <div class="flex items-center justify-center gap-8 md:gap-16 w-full mb-8">
+                    <div class="flex flex-col items-center gap-4 w-1/3">
+                        <div class="w-20 h-20 md:w-24 md:h-24 bg-zinc-900 rounded-full flex items-center justify-center border-2 border-zinc-700 shadow-inner">
+                            <span class="font-display text-2xl text-zinc-500">M</span>
+                        </div>
+                        <span id="ing-mandante" class="font-display text-2xl md:text-4xl uppercase">...</span>
+                    </div>
+                    <span class="text-zinc-600 font-bold text-xl md:text-3xl">X</span>
+                    <div class="flex flex-col items-center gap-4 w-1/3">
+                        <div class="w-20 h-20 md:w-24 md:h-24 bg-zinc-900 rounded-full flex items-center justify-center border-2 border-zinc-700 shadow-inner">
+                            <span class="font-display text-2xl text-zinc-500">V</span>
+                        </div>
+                        <span id="ing-visitante" class="font-display text-2xl md:text-4xl uppercase">...</span>
+                    </div>
+                </div>
+                <div class="text-gray-300 font-medium mb-2" id="ing-data">...</div>
+                <div class="text-gray-500 text-sm mb-8" id="ing-local">...</div>
+                <div class="text-xs text-gray-500 uppercase tracking-widest mb-4">Disponível para todos os públicos</div>
+                <button class="bg-ouro hover:bg-yellow-500 text-dark font-bold text-lg uppercase px-16 py-4 rounded-sm transition-transform transform hover:scale-105 shadow-[0_0_30px_rgba(255,208,0,0.2)]">
+                    Compre Agora
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROGRAMAS DO CLUBE -->
+    <section id="vitrine-planos" class="w-full pt-16 pb-24 bg-darker">
+
+        <!-- SÓCIO-TORCEDOR (PAIXÃO) -->
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h2 class="font-display text-4xl uppercase text-white mb-4">Sócio-Torcedor</h2>
+            <p class="text-gray-500 text-sm mb-12 max-w-2xl mx-auto">Sorteios semestrais (20% da arrecadação de cada grupo volta em prêmios). Limite máximo de 500 sócios por categoria.</p>
+
+            <!-- Grid de 4 Planos -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-left mb-24">
+
+                <!-- 1. PLANO BRONZE -->
+                <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-sm flex flex-col justify-between hover:border-bronze transition-all relative overflow-hidden group">
+                    <div class="absolute top-3 right-3 bg-zinc-800 border border-zinc-700 text-gray-400 text-[10px] font-bold uppercase px-2 py-1 rounded-sm">500 Vagas</div>
+                    <div>
+                        <h3 class="font-display text-3xl uppercase text-bronze mb-1 mt-4">Bronze</h3>
+                        <p class="text-xs text-gray-500 mb-6 border-b border-zinc-800 pb-4">O acesso de entrada para apoiar o time na arquibancada.</p>
+
+                        <div class="flex items-end gap-1 mb-6">
+                            <span class="text-gray-500 text-sm font-bold">R$</span>
+                            <span class="text-white font-display text-4xl">20<span class="text-xl">,00</span></span>
+                            <span class="text-gray-500 text-xs">/ mês</span>
+                        </div>
+
+                        <ul class="text-xs text-gray-400 space-y-3 mb-8">
+                            <li class="flex items-start gap-2"><span class="text-bronze font-bold">✓</span> 50% OFF no ingresso (mandante)</li>
+                            <li class="flex items-start gap-2"><span class="text-bronze font-bold">✓</span> Carteirinha virtual oficial</li>
+                            <li class="flex items-start gap-2"><span class="text-bronze font-bold">✓</span> 1 Bilhete para sorteio semestral</li>
+                        </ul>
+
+                        <div class="bg-bronze/10 border border-bronze/20 rounded-sm p-3 mb-6 text-center">
+                            <span class="block text-[10px] uppercase tracking-widest text-bronze mb-1">Teto do Sorteio</span>
+                            <span class="font-bold text-sm text-white">Até R$ 12.000,00</span>
+                        </div>
+                    </div>
+                    <button class="w-full bg-bronze/80 hover:bg-bronze text-white font-bold py-3 uppercase text-xs tracking-wide rounded-sm transition-colors">Assinar Bronze</button>
+                </div>
+
+                <!-- 2. PLANO PRATA -->
+                <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-sm flex flex-col justify-between hover:border-prata transition-all relative overflow-hidden group">
+                    <div class="absolute top-3 right-3 bg-zinc-800 border border-zinc-700 text-gray-400 text-[10px] font-bold uppercase px-2 py-1 rounded-sm">500 Vagas</div>
+                    <div>
+                        <h3 class="font-display text-3xl uppercase text-prata mb-1 mt-4">Prata</h3>
+                        <p class="text-xs text-gray-500 mb-6 border-b border-zinc-800 pb-4">Para o torcedor assíduo que não perde nenhum jogo no Aluizão.</p>
+
+                        <div class="flex items-end gap-1 mb-6">
+                            <span class="text-gray-500 text-sm font-bold">R$</span>
+                            <span class="text-white font-display text-4xl">40<span class="text-xl">,00</span></span>
+                            <span class="text-gray-500 text-xs">/ mês</span>
+                        </div>
+
+                        <ul class="text-xs text-gray-400 space-y-3 mb-8">
+                            <li class="flex items-start gap-2"><span class="text-prata font-bold">✓</span> Entrada Livre (100% OFF)</li>
+                            <li class="flex items-start gap-2"><span class="text-prata font-bold">✓</span> Carteirinha física personalizada</li>
+                            <li class="flex items-start gap-2"><span class="text-prata font-bold">✓</span> 10% OFF em produtos oficiais</li>
+                            <li class="flex items-start gap-2"><span class="text-prata font-bold">✓</span> 1 Bilhete para sorteio semestral</li>
+                        </ul>
+
+                        <div class="bg-prata/10 border border-prata/20 rounded-sm p-3 mb-6 text-center">
+                            <span class="block text-[10px] uppercase tracking-widest text-prata mb-1">Teto do Sorteio</span>
+                            <span class="font-bold text-sm text-white">Até R$ 24.000,00</span>
+                        </div>
+                    </div>
+                    <button class="w-full bg-prata hover:bg-white text-dark font-bold py-3 uppercase text-xs tracking-wide rounded-sm transition-colors">Assinar Prata</button>
+                </div>
+
+                <!-- 3. PLANO OURO -->
+                <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-sm flex flex-col justify-between hover:border-ouro transition-all relative overflow-hidden group shadow-lg">
+                    <div class="absolute -right-10 top-5 bg-ouro text-dark text-[10px] font-bold uppercase py-1 px-10 rotate-45 transform">Popular</div>
+                    <div class="absolute top-3 left-3 bg-zinc-800 border border-zinc-700 text-gray-400 text-[10px] font-bold uppercase px-2 py-1 rounded-sm">500 Vagas</div>
+
+                    <div>
+                        <h3 class="font-display text-3xl uppercase text-ouro mb-1 mt-8">Ouro</h3>
+                        <p class="text-xs text-gray-500 mb-6 border-b border-zinc-800 pb-4">Acesso duplo, experiências com o elenco e o manto oficial.</p>
+
+                        <div class="flex items-end gap-1 mb-6">
+                            <span class="text-gray-500 text-sm font-bold">R$</span>
+                            <span class="text-white font-display text-4xl">60<span class="text-xl">,00</span></span>
+                            <span class="text-gray-500 text-xs">/ mês</span>
+                        </div>
+
+                        <ul class="text-xs text-gray-400 space-y-3 mb-8">
+                            <li class="flex items-start gap-2"><span class="text-ouro font-bold">✓</span> Entrada Livre + 1 Acompanhante</li>
+                            <li class="flex items-start gap-2"><span class="text-ouro font-bold">✓</span> <b>1 Camisa Oficial (após 6 meses)</b></li>
+                            <li class="flex items-start gap-2"><span class="text-ouro font-bold">✓</span> 20% OFF em produtos oficiais</li>
+                            <li class="flex items-start gap-2"><span class="text-ouro font-bold">✓</span> Acesso exclusivo aos treinos</li>
+                            <li class="flex items-start gap-2"><span class="text-ouro font-bold">✓</span> 1 Bilhete para sorteio semestral</li>
+                        </ul>
+
+                        <div class="bg-ouro/10 border border-ouro/20 rounded-sm p-3 mb-6 text-center">
+                            <span class="block text-[10px] uppercase tracking-widest text-ouro mb-1">Teto do Sorteio</span>
+                            <span class="font-bold text-sm text-white">Até R$ 36.000,00</span>
+                        </div>
+                    </div>
+                    <button class="w-full bg-ouro hover:bg-yellow-500 text-dark font-bold py-3 uppercase text-xs tracking-wide rounded-sm transition-colors shadow-[0_0_15px_rgba(255,208,0,0.2)]">Assinar Ouro</button>
+                </div>
+
+                <!-- 4. PLANO DIAMANTE -->
+                <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-sm flex flex-col justify-between hover:border-diamante transition-all relative overflow-hidden group">
+                    <div class="absolute top-3 right-3 bg-zinc-800 border border-zinc-700 text-gray-400 text-[10px] font-bold uppercase px-2 py-1 rounded-sm">500 Vagas</div>
+                    <div>
+                        <span class="text-diamante text-[10px] font-bold uppercase tracking-widest block mt-4 mb-1">O Dono do Madeira</span>
+                        <h3 class="font-display text-3xl uppercase text-white mb-1">Diamante</h3>
+                        <p class="text-xs text-gray-500 mb-6 border-b border-zinc-800 pb-4">Tratamento VIP, acesso restrito e contato direto com a Diretoria.</p>
+
+                        <div class="flex items-end gap-1 mb-6">
+                            <span class="text-gray-500 text-sm font-bold">R$</span>
+                            <span class="text-white font-display text-4xl">80<span class="text-xl">,00</span></span>
+                            <span class="text-gray-500 text-xs">/ mês</span>
+                        </div>
+
+                        <ul class="text-xs text-gray-400 space-y-3 mb-8">
+                            <li class="flex items-start gap-2"><span class="text-diamante font-bold">✓</span> Área VIP/Cadeiras + 1 Acompanhante</li>
+                            <li class="flex items-start gap-2"><span class="text-diamante font-bold">✓</span> <b>1 Camisa Oficial (após 6 meses)</b></li>
+                            <li class="flex items-start gap-2"><span class="text-diamante font-bold">✓</span> 25% OFF em produtos oficiais</li>
+                            <li class="flex items-start gap-2"><span class="text-diamante font-bold">✓</span> Jantares consulares com Diretoria</li>
+                            <li class="flex items-start gap-2"><span class="text-diamante font-bold">✓</span> 1 Bilhete para sorteio semestral</li>
+                        </ul>
+
+                        <div class="bg-diamante/10 border border-diamante/20 rounded-sm p-3 mb-6 text-center">
+                            <span class="block text-[10px] uppercase tracking-widest text-diamante mb-1">Teto do Sorteio</span>
+                            <span class="font-bold text-sm text-white">Até R$ 48.000,00</span>
+                        </div>
+                    </div>
+                    <button class="w-full bg-diamante/80 hover:bg-diamante text-dark font-bold py-3 uppercase text-xs tracking-wide rounded-sm transition-colors">Assinar Diamante</button>
+                </div>
+            </div>
+
+            <!-- SÓCIO-INVESTIDOR (NEGÓCIOS) -->
+            <div class="text-center mb-8">
+                <h2 class="font-display text-4xl uppercase text-white mb-4">Sócio-Investidor Genus</h2>
+                <p class="text-gray-500 text-sm max-w-2xl mx-auto">Parceria de negócios de alto impacto. Retorno financeiro via dividendos anuais, sorteios globais milionários e as melhores experiências de hospitalidade esportiva.</p>
+            </div>
+
+            <div class="w-full bg-gradient-to-br from-zinc-900 to-black border border-ouro/40 rounded-sm p-1 lg:p-1 relative overflow-hidden group hover:border-ouro transition-colors shadow-[0_0_30px_rgba(255,208,0,0.05)]">
+
+                <div class="absolute inset-0 bg-investor pointer-events-none"></div>
+
+                <div class="bg-darker/90 backdrop-blur-sm p-8 lg:p-12 relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12">
+
+                    <!-- Bloco Esquerdo (Preço e Botão) -->
+                    <div class="lg:w-1/3 text-left w-full">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-ouro/10 border border-ouro/20 rounded-sm mb-6">
+                            <span class="w-2 h-2 rounded-full bg-ouro animate-pulse block"></span>
+                            <span class="text-[10px] font-bold text-ouro uppercase tracking-widest">Hard Cap: 2.000 Cotas (Global)</span>
+                        </div>
+
+                        <h3 class="font-display text-5xl md:text-6xl uppercase text-white mb-2 leading-none">O Futuro<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-ouro to-yellow-300">Em Suas Mãos</span></h3>
+
+                        <div class="flex items-end gap-2 mt-8 mb-8">
+                            <span class="text-gray-400 text-lg font-bold">R$</span>
+                            <span class="text-white font-display text-6xl md:text-7xl">100<span class="text-3xl">,00</span></span>
+                            <span class="text-gray-400 text-sm">/ cota ao mês</span>
+                        </div>
+
+                        <button class="w-full bg-ouro hover:bg-yellow-500 text-dark font-bold py-4 uppercase text-sm tracking-wide rounded-sm transition-transform transform hover:scale-105 shadow-[0_0_20px_rgba(255,208,0,0.3)]">
+                            Reservar Minhas Cotas
+                        </button>
+                    </div>
+
+                    <!-- Bloco Direito (Vantagens do Investidor) -->
+                    <div class="lg:w-2/3 w-full grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+
+                        <!-- Benefício 1 -->
+                        <div class="bg-black/50 border border-zinc-800 p-6 rounded-sm">
+                            <div class="text-ouro mb-3"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
+                            <h4 class="font-display text-xl text-white uppercase mb-2">Dividendos Anuais</h4>
+                            <p class="text-xs text-gray-400 leading-relaxed">A partir do 2º ano, <b>10% do Lucro Líquido (Superávit)</b> contábil de todas as receitas do clube será repartido anualmente e proporcionalmente entre os cotistas ativos.</p>
+                        </div>
+
+                        <!-- Benefício 2 -->
+                        <div class="bg-black/50 border border-zinc-800 p-6 rounded-sm">
+                            <div class="text-ouro mb-3"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
+                            <h4 class="font-display text-xl text-white uppercase mb-2">Sorteio Global Milionário</h4>
+                            <p class="text-xs text-gray-400 leading-relaxed">20% da arrecadação total do programa forma o prêmio semestral. Concorra a até <b>R$ 240.000,00</b> divididos entre o 1º, 2º e 3º sorteado a cada 6 meses.</p>
+                        </div>
+
+                        <!-- Benefício 3 -->
+                        <div class="bg-black/50 border border-zinc-800 p-6 rounded-sm">
+                            <div class="text-ouro mb-3"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
+                            <h4 class="font-display text-xl text-white uppercase mb-2">Pé na Estrada</h4>
+                            <p class="text-xs text-gray-400 leading-relaxed">Sorteios pontuais de <b>hospitalidade completa</b> (passagem, hotel e ingresso) para acompanhar a delegação oficial do Genus em jogos fora de Rondônia.</p>
+                        </div>
+
+                        <!-- Benefício 4 -->
+                        <div class="bg-black/50 border border-zinc-800 p-6 rounded-sm">
+                            <div class="text-ouro mb-3"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg></div>
+                            <h4 class="font-display text-xl text-white uppercase mb-2">Equivalência Diamante</h4>
+                            <p class="text-xs text-gray-400 leading-relaxed">Todos os benefícios da principal categoria inclusos: Camisa grátis no 6º mês, Área VIP + acompanhante grátis, 25% OFF na loja e networking presencial com a Diretoria.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SCRIPT DA API -->
+    <script>
+        async function carregarIngressoProximoJogo() {
+            try {
+                const resposta = await fetch('/api/jogos');
+                const jogos = await resposta.json();
+
+                if (jogos.length > 0) {
+                    const proximoJogo = jogos[0];
+
+                    document.getElementById('ing-campeonato').innerText = proximoJogo.campeonato;
+                    document.getElementById('ing-mandante').innerText = proximoJogo.mandante;
+                    document.getElementById('ing-visitante').innerText = proximoJogo.visitante;
+                    document.getElementById('ing-data').innerText = `${proximoJogo.data} às ${proximoJogo.hora}`;
+                    document.getElementById('ing-local').innerText = proximoJogo.local;
+
+                    document.getElementById('ingresso-container').style.opacity = '1';
+                }
+            } catch (erro) {
+                console.error("Erro ao carregar ingressos:", erro);
+                document.getElementById('ing-campeonato').innerText = "Sistema de ingressos em atualização.";
+                document.getElementById('ingresso-container').style.opacity = '1';
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', carregarIngressoProximoJogo);
+    </script>
+</body>
+</html>
