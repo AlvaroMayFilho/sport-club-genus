@@ -79,44 +79,49 @@
     <!-- Espaçamento -->
     <div class="h-6 w-full bg-[#f8f9fa]"></div>
 
-    <!-- Carrossel de Imagens -->
-    <section class="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-12 mb-16 md:mb-20 relative overflow-hidden mt-6">
-        <div class="relative w-full h-[380px] sm:h-[440px] md:h-[550px] rounded-sm overflow-hidden group shadow-2xl">
+<!-- Carrossel de Imagens -->
+    <section class="w-full max-w-7xl mx-auto px-6 md:px-12 mb-20 relative overflow-hidden mt-6">
+        <div class="relative w-full h-[400px] md:h-[550px] rounded-sm overflow-hidden group shadow-2xl">
             <div id="carousel" class="carousel-track h-full">
+
+                <!-- Slide 1 -->
                 <div class="carousel-slide h-full relative bg-zinc-800">
-                    <img src="https://images.unsplash.com/photo-1508344928928-7137b29de218?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover opacity-80" alt="Estádio Lotado">
+                    <img src="{{ url_for('static', filename='img/carrossel1.jpg') }}" class="w-full h-full object-cover opacity-80" alt="Estádio Lotado">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
-                    <div class="absolute bottom-8 sm:bottom-10 left-6 sm:left-10 right-6 text-white text-center sm:text-left">
-                        <span class="text-ouro font-bold text-xs sm:text-sm tracking-widest uppercase mb-2 block">A Força de Rondônia</span>
-                        <h2 class="font-display text-4xl md:text-5xl uppercase drop-shadow-lg leading-tight">O Caldeirão<br>Aluizão</h2>
+                    <div class="absolute bottom-10 left-10 text-white">
+                        <span class="text-ouro font-bold text-sm tracking-widest uppercase mb-2 block">A Força de Rondônia</span>
+                        <h2 class="font-display text-4xl md:text-5xl uppercase drop-shadow-lg">O Caldeirão<br>Aluizão</h2>
                     </div>
                 </div>
 
+                <!-- Slide 2 -->
                 <div class="carousel-slide h-full relative bg-zinc-800">
-                    <img src="https://images.unsplash.com/photo-1574629810360-7efbb6b49987?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover opacity-80" alt="Jogador comemorando">
+                    <img src="{{ url_for('static', filename='img/carrossel2.jpg') }}" class="w-full h-full object-cover opacity-80" alt="Equipe em campo">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
-                    <div class="absolute bottom-8 sm:bottom-10 left-6 sm:left-10 right-6 text-white text-center sm:text-left">
-                        <span class="text-ouro font-bold text-xs sm:text-sm tracking-widest uppercase mb-2 block">Nova Temporada</span>
-                        <h2 class="font-display text-4xl md:text-5xl uppercase drop-shadow-lg leading-tight">Garra e<br>Determinação</h2>
+                    <div class="absolute bottom-10 left-10 text-white">
+                        <span class="text-ouro font-bold text-sm tracking-widest uppercase mb-2 block">Nova Temporada</span>
+                        <h2 class="font-display text-4xl md:text-5xl uppercase drop-shadow-lg">Garra e<br>Determinação</h2>
                     </div>
                 </div>
 
+<!-- Slide 3 -->
                 <div class="carousel-slide h-full relative bg-zinc-800">
-                    <img src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover opacity-80" alt="Torcida">
+                    <!-- Adicionada a classe object-top para focar nos rostos -->
+                    <img src="{{ url_for('static', filename='img/carrossel3.jpg') }}" class="w-full h-full object-cover object-top opacity-80" alt="Jogadoras do Genus">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
-                    <div class="absolute bottom-8 sm:bottom-10 left-6 sm:left-10 right-6 text-white text-center sm:text-left">
-                        <span class="text-ouro font-bold text-xs sm:text-sm tracking-widest uppercase mb-2 block">A Maior Torcida</span>
-                        <h2 class="font-display text-4xl md:text-5xl uppercase drop-shadow-lg leading-tight">O Furacão<br>do Madeira</h2>
+                    <div class="absolute bottom-10 left-10 text-white">
+                        <span class="text-ouro font-bold text-sm tracking-widest uppercase mb-2 block">A Maior Torcida</span>
+                        <h2 class="font-display text-4xl md:text-5xl uppercase drop-shadow-lg">O Furacão<br>do Madeira</h2>
                     </div>
                 </div>
+
             </div>
 
-            <button onclick="moveSlide(-1)" class="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-grena text-white w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full transition-colors backdrop-blur-sm border border-white/10" aria-label="Slide anterior">
-                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            <button onclick="moveSlide(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-grena text-white w-12 h-12 flex items-center justify-center rounded-full transition-colors backdrop-blur-sm border border-white/10 z-10">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
             </button>
-
-            <button onclick="moveSlide(1)" class="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-grena text-white w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full transition-colors backdrop-blur-sm border border-white/10" aria-label="Próximo slide">
-                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            <button onclick="moveSlide(1)" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-grena text-white w-12 h-12 flex items-center justify-center rounded-full transition-colors backdrop-blur-sm border border-white/10 z-10">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
             </button>
         </div>
     </section>
