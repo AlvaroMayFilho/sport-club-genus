@@ -1,6 +1,7 @@
 import os
+import time
 import firebase_admin
-from firebase_admin import credentials
+from firebase_admin import credentials, firestore
 from flask import Flask, jsonify, render_template
 from flask_cors import CORS
 from dotenv import load_dotenv
@@ -16,6 +17,9 @@ if not firebase_admin._apps:
     caminho_firebase = os.getenv("FIREBASE_CREDENTIALS_PATH", os.path.join(BASE_DIR, "firebase-key.json"))
     cred = credentials.Certificate(caminho_firebase)
     firebase_admin.initialize_app(cred)
+
+# Cliente do Firestore (usado nas rotas de leitura de vagas)
+db = firestore.client()
 
 from rotas.adesao import adesao_bp
 
@@ -44,6 +48,59 @@ def obter_jogos():
         { "campeonato": "Copa do Brasil 2026", "mandante": "GENUS", "visitante": "REMO", "data": "05/03/2026", "hora": "20:30", "local": "Aluizão - Porto Velho, RO" }
     ]
     return jsonify(jogos)
+
+# 3. Vagas reais (Firestore: coleções "grupos" e "investidor")
+CACHE_VAGAS_SEGUNDOS = 30
+_cache_vagas = {"ts": 0, "dados": None}
+
+
+def _montar_vaga(doc_dict):
+    """Normaliza um documento do Firestore para o formato que o front usa."""
+    vendidas = int(doc_dict.get("cotas_vendidas", 0) or 0)
+    maximo = int(doc_dict.get("max_cotas", 0) or 0)
+    restantes = max(maximo - vendidas, 0)
+    percentual = round(min(vendidas / maximo * 100, 100), 1) if maximo > 0 else 0
+    return {
+        "nome_plano": doc_dict.get("nome_plano"),
+        "valor_mensal": doc_dict.get("valor_mensal"),
+        "cotas_vendidas": vendidas,
+        "max_cotas": maximo,
+        "restantes": restantes,
+        "percentual": percentual,
+    }
+
+
+def _ler_vagas_firestore():
+    grupos = {}
+    for doc in db.collection("grupos").stream():
+        grupos[doc.id] = _montar_vaga(doc.to_dict() or {})
+
+    investidor = None
+    doc_inv = db.collection("investidor").document("Investidor").get()
+    if doc_inv.exists:
+        investidor = _montar_vaga(doc_inv.to_dict() or {})
+
+    return {"grupos": grupos, "investidor": investidor}
+
+
+@app.route('/api/vagas', methods=['GET'])
+def obter_vagas():
+    agora = time.time()
+
+    # Cache curto em memória para não ler o Firestore a cada visita
+    if _cache_vagas["dados"] is not None and agora - _cache_vagas["ts"] < CACHE_VAGAS_SEGUNDOS:
+        return jsonify(_cache_vagas["dados"])
+
+    try:
+        dados = _ler_vagas_firestore()
+    except Exception as erro:
+        app.logger.error("Erro ao ler vagas no Firestore: %s", erro)
+        return jsonify({"erro": "Não foi possível carregar as vagas agora."}), 503
+
+    _cache_vagas["dados"] = dados
+    _cache_vagas["ts"] = agora
+    return jsonify(dados)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

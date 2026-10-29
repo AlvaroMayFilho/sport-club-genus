@@ -1,42 +1,9 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sport Club Genus | O Furacão do Madeira</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        display: ['Anton', 'sans-serif'],
-                    },
-                    colors: {
-                        grena: '#7A1220',
-                        ouro: '#FFD000',
-                        dark: '#0a0a0a',
-                        darker: '#050505',
-                        zinc950: '#09090b'
-                    }
-                }
-            }
-        }
-    </script>
+{% extends "base.html" %}
+
+{% block title %}Sport Club Genus | O Furacão do Madeira{% endblock %}
+
+{% block styles %}
     <style>
-        html {
-            scroll-behavior: smooth;
-        }
-
-        img {
-            max-width: 100%;
-            height: auto;
-        }
-
         .text-outline {
             color: transparent;
             -webkit-text-stroke: 2px #f3f4f6;
@@ -64,59 +31,10 @@
             }
         }
     </style>
-</head>
-<body class="bg-[#f8f9fa] text-gray-900 font-sans antialiased overflow-x-hidden">
+{% endblock %}
 
-    <!-- HEADER / NAVBAR COMPLEXA -->
-    <header class="w-full sticky top-0 z-50 shadow-2xl">
-
-        <!-- 1. Barra Principal (Navegação) -->
-        <nav class="w-full bg-darker h-20 px-4 sm:px-6 md:px-12 flex justify-between items-center relative z-20">
-
-            <!-- Logo Flutuante Gigante -->
-            <div class="absolute left-4 sm:left-6 md:left-12 top-2 z-[60]">
-                <a href="#">
-                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo Genus" class="w-24 sm:w-32 md:w-56 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] drop-shadow-[0_0_3px_rgba(255,255,255,0.6)] hover:scale-105 transition-transform duration-300 origin-top-left">
-                </a>
-            </div>
-
-            <!-- Espaçador para respeitar a logo -->
-            <div class="w-24 sm:w-32 md:w-48 shrink-0"></div>
-
-            <!-- Links Centrais -->
-            <div class="hidden md:flex space-x-8 lg:space-x-12 text-sm font-bold text-gray-300 tracking-wider uppercase">
-                <a href="#historia" class="hover:text-ouro transition-colors">O Clube</a>
-                <a href="#planos" class="hover:text-ouro transition-colors">Planos</a>
-                <a href="/planos" class="text-ouro border-b-2 border-ouro pb-1 hover:text-white transition-colors">Ingressos / Planos</a>
-                <a href="#vantagens" class="hover:text-ouro transition-colors">Vantagens</a>
-            </div>
-
-            <!-- Botão Área do Sócio + Hambúrguer -->
-            <div class="flex items-center z-10 ml-auto">
-                <a href="#" class="text-xs sm:text-sm font-bold flex items-center gap-2 bg-zinc-900 hover:bg-grena text-white px-3 sm:px-5 md:px-6 py-2.5 rounded-sm transition-all duration-300 border border-zinc-700 hover:border-grena whitespace-nowrap">
-                    <span class="w-2.5 h-2.5 rounded-full bg-ouro block animate-pulse shrink-0"></span>
-                    Área do Sócio
-                </a>
-
-                <!-- Botão Hambúrguer (somente mobile) -->
-                <button id="hamburger-btn" onclick="toggleMenu()" class="md:hidden ml-2 sm:ml-3 p-2 text-gray-300 hover:text-ouro transition-colors" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="mobile-menu">
-                    <svg id="icon-abrir" class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                    <svg id="icon-fechar" class="w-7 h-7 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
-
-            <!-- Menu Mobile (Dropdown) -->
-            <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-darker border-t border-zinc-800 shadow-2xl z-50">
-                <div class="flex flex-col py-2 text-sm font-bold text-gray-300 tracking-wider uppercase">
-                    <a href="#historia" onclick="fecharMenu()" class="px-6 py-4 hover:bg-zinc-900 hover:text-ouro transition-colors border-b border-zinc-800/60">O Clube</a>
-                    <a href="#planos" onclick="fecharMenu()" class="px-6 py-4 hover:bg-zinc-900 hover:text-ouro transition-colors border-b border-zinc-800/60">Planos</a>
-                    <a href="/planos" onclick="fecharMenu()" class="px-6 py-4 text-ouro hover:bg-zinc-900 transition-colors border-b border-zinc-800/60">Ingressos / Planos</a>
-                    <a href="#vantagens" onclick="fecharMenu()" class="px-6 py-4 hover:bg-zinc-900 hover:text-ouro transition-colors">Vantagens</a>
-                </div>
-            </div>
-        </nav>
-
-        <!-- 2. Barra Secundária (Próximos Jogos - Estilo Corinthians) -->
+{# Barra secundária: Próximos Jogos (Estilo Corinthians) #}
+{% block subheader %}
         <div class="w-full bg-zinc950 border-b border-zinc-800 min-h-12 flex items-center justify-between px-2 sm:px-6 text-xs text-gray-400 font-semibold relative z-10">
 
             <!-- Espaçador para desktop respeitar a logo -->
@@ -155,8 +73,9 @@
                 </button>
             </div>
         </div>
-    </header>
+{% endblock %}
 
+{% block content %}
     <!-- Espaçamento -->
     <div class="h-6 w-full bg-[#f8f9fa]"></div>
 
@@ -203,7 +122,7 @@
     </section>
 
     <!-- O Clube (Resumo Histórico) -->
-    <section id="historia" class="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-12 pb-20 md:pb-24">
+    <section id="historia" class="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-12 pb-20 md:pb-24 scroll-mt-28">
         <div class="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-12 items-center">
             <div class="md:col-span-5 relative">
                 <div class="absolute left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0 md:-ml-4 top-10 text-[95px] sm:text-[130px] md:text-[150px] font-display text-gray-200 opacity-50 z-0">1981</div>
@@ -231,7 +150,7 @@
     </section>
 
     <!-- Apresentação do Manto -->
-    <header class="relative w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-12 pb-24 md:pb-32">
+    <section class="relative w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-12 pb-24 md:pb-32">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12 items-start relative bg-white shadow-xl p-6 sm:p-10 md:p-16 rounded-sm border border-gray-100">
             <div class="z-10 pt-4 text-center md:text-left">
                 <span class="inline-block py-1 px-3 bg-dark text-white text-xs font-bold tracking-widest uppercase mb-6 rounded-sm">Novo Lançamento</span>
@@ -265,10 +184,10 @@
                 </div>
             </div>
         </div>
-    </header>
+    </section>
 
     <!-- Seção Dark: Sócio Investidor vs Torcedor -->
-    <section id="planos" class="bg-dark text-white pt-24 md:pt-32 pb-20 md:pb-24 px-4 sm:px-6 md:px-12 relative overflow-hidden">
+    <section id="planos" class="bg-dark text-white pt-24 md:pt-32 pb-20 md:pb-24 px-4 sm:px-6 md:px-12 relative overflow-hidden scroll-mt-28">
         <div class="max-w-7xl mx-auto">
             <h2 class="font-display text-[58px] sm:text-[88px] md:text-[140px] leading-[0.85] md:leading-[0.8] uppercase tracking-tighter text-outline-dark mb-12 md:mb-16 opacity-80 text-center md:text-left">
                 A FORÇA<br>
@@ -290,7 +209,7 @@
                             Planos sob medida para a sua paixão. Ingressos garantidos, descontos de 10% a 25% na rede parceira e experiências exclusivas com o elenco.
                         </p>
 
-                        <a href="/planos" class="inline-flex items-center gap-2 text-ouro font-bold text-sm uppercase hover:text-white transition-colors">
+                        <a href="{{ url_for('planos') }}" class="inline-flex items-center gap-2 text-ouro font-bold text-sm uppercase hover:text-white transition-colors">
                             Ver Planos e Valores &rarr;
                         </a>
                     </div>
@@ -313,7 +232,7 @@
                             O futuro em suas mãos. Garanta sua cota por R$ 100/mês, tenha poder de voto nas assembleias e participe na distribuição de resultados do clube.
                         </p>
 
-                        <a href="/planos#vitrine-planos" class="inline-flex items-center gap-2 text-white font-bold text-sm uppercase hover:text-ouro transition-colors">
+                        <a href="{{ url_for('planos') }}#socio-investidor" class="inline-flex items-center gap-2 text-white font-bold text-sm uppercase hover:text-ouro transition-colors">
                             Reservar Minha Cota &rarr;
                         </a>
                     </div>
@@ -321,29 +240,10 @@
             </div>
         </div>
     </section>
+{% endblock %}
 
-    <!-- SCRIPTS DE CARREGAMENTO -->
+{% block scripts %}
     <script>
-        // 0. MENU HAMBÚRGUER (MOBILE)
-        function toggleMenu() {
-            const menu = document.getElementById('mobile-menu');
-            const btn = document.getElementById('hamburger-btn');
-            const iconAbrir = document.getElementById('icon-abrir');
-            const iconFechar = document.getElementById('icon-fechar');
-
-            const aberto = menu.classList.toggle('hidden') === false;
-            iconAbrir.classList.toggle('hidden', aberto);
-            iconFechar.classList.toggle('hidden', !aberto);
-            btn.setAttribute('aria-expanded', aberto ? 'true' : 'false');
-        }
-
-        function fecharMenu() {
-            document.getElementById('mobile-menu').classList.add('hidden');
-            document.getElementById('icon-abrir').classList.remove('hidden');
-            document.getElementById('icon-fechar').classList.add('hidden');
-            document.getElementById('hamburger-btn').setAttribute('aria-expanded', 'false');
-        }
-
         // 1. CARROSSEL
         let currentSlide = 0;
         const track = document.getElementById('carousel');
@@ -402,5 +302,4 @@
 
         window.addEventListener('DOMContentLoaded', carregarJogos);
     </script>
-</body>
-</html>
+{% endblock %}

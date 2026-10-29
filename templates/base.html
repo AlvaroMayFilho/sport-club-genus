@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sport Club Genus | O Furacão do Madeira{% endblock %}</title>
+
+    <!-- Tailwind + Fontes + Tema (comum a todas as telas) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Anton', 'sans-serif'],
+                    },
+                    colors: {
+                        grena: '#7A1220',
+                        ouro: '#FFD000',
+                        bronze: '#CD7F32',
+                        prata: '#E5E7EB',
+                        diamante: '#8BE9FD',
+                        dark: '#0a0a0a',
+                        darker: '#050505',
+                        zinc950: '#09090b'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+
+    {# CSS específico de cada página #}
+    {% block styles %}{% endblock %}
+</head>
+<body class="{% block body_class %}bg-[#f8f9fa] text-gray-900{% endblock %} font-sans antialiased overflow-x-hidden">
+
+    {# Links do menu: (texto, endereço, destaque) #}
+    {% set nav_links = [
+        ('O Clube', url_for('index') ~ '#historia', false),
+        ('Planos', url_for('index') ~ '#planos', false),
+        ('Ingressos / Planos', url_for('planos'), true),
+        ('Dúvidas', url_for('planos') ~ '#faq', false),
+        ('Contato', '#', false)
+    ] %}
+
+    <!-- HEADER / NAVBAR (comum a todas as telas) -->
+    <header class="w-full sticky top-0 z-50 shadow-2xl">
+
+        <!-- 1. Barra Principal (Navegação) -->
+        <nav class="w-full bg-darker h-20 px-4 sm:px-6 md:px-12 flex justify-between items-center relative z-20 {% block nav_extra_class %}{% endblock %}">
+
+            <!-- Logo Flutuante -->
+            <div class="absolute left-4 sm:left-6 md:left-12 top-2 z-[60]">
+                <a href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo Genus" class="{% block logo_class %}w-24 sm:w-32 md:w-56 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] drop-shadow-[0_0_3px_rgba(255,255,255,0.6)]{% endblock %} hover:scale-105 transition-transform duration-300 origin-top-left">
+                </a>
+            </div>
+
+            <!-- Espaçador para respeitar a logo -->
+            <div class="w-24 sm:w-32 md:w-48 shrink-0"></div>
+
+            <!-- Links Centrais -->
+            <div class="hidden md:flex space-x-8 lg:space-x-12 text-sm font-bold text-gray-300 tracking-wider uppercase items-center">
+                {% for texto, href, destaque in nav_links %}
+                    {% if destaque %}
+                    <a href="{{ href }}" class="text-ouro border-b-2 border-ouro pb-1 hover:text-white transition-colors">{{ texto }}</a>
+                    {% else %}
+                    <a href="{{ href }}" class="hover:text-ouro transition-colors">{{ texto }}</a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- Botão Área do Sócio + Hambúrguer -->
+            <div class="flex items-center z-10 ml-auto">
+                <a href="#" class="text-xs sm:text-sm font-bold flex items-center gap-2 bg-zinc-900 hover:bg-grena text-white px-3 sm:px-5 md:px-6 py-2.5 rounded-sm transition-all duration-300 border border-zinc-700 hover:border-grena whitespace-nowrap">
+                    <span class="w-2.5 h-2.5 rounded-full bg-ouro block animate-pulse shrink-0"></span>
+                    Área do Sócio
+                </a>
+
+                <!-- Botão Hambúrguer (somente mobile) -->
+                <button id="hamburger-btn" onclick="toggleMenu()" class="md:hidden ml-2 sm:ml-3 p-2 text-gray-300 hover:text-ouro transition-colors" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="mobile-menu">
+                    <svg id="icon-abrir" class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    <svg id="icon-fechar" class="w-7 h-7 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <!-- Menu Mobile (Dropdown) -->
+            <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-darker border-t border-zinc-800 shadow-2xl z-50">
+                <div class="flex flex-col py-2 text-sm font-bold text-gray-300 tracking-wider uppercase">
+                    {% for texto, href, destaque in nav_links %}
+                    <a href="{{ href }}" onclick="fecharMenu()" class="px-6 py-4 hover:bg-zinc-900 transition-colors {% if destaque %}text-ouro{% else %}hover:text-ouro{% endif %} {% if not loop.last %}border-b border-zinc-800/60{% endif %}">{{ texto }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </nav>
+
+        {# Barra secundária opcional (ex.: ticker de jogos na home) #}
+        {% block subheader %}{% endblock %}
+    </header>
+
+    <!-- CONTEÚDO DA PÁGINA -->
+    {% block content %}{% endblock %}
+
+    <!-- RODAPÉ (comum a todas as telas) -->
+    {% block footer %}
+    <footer class="w-full bg-darker text-gray-400 border-t border-zinc-800">
+        <!-- Filete Grená / Ouro -->
+        <div class="h-1 w-full bg-gradient-to-r from-grena via-ouro to-grena"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 pt-14 pb-10">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-12 text-center md:text-left">
+
+                <!-- Marca -->
+                <div class="md:col-span-5">
+                    <a href="{{ url_for('index') }}" class="inline-block">
+                        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo Genus" class="w-28 mx-auto md:mx-0 opacity-90 hover:opacity-100 transition-opacity">
+                    </a>
+                    <p class="font-display text-2xl uppercase text-white tracking-wide mt-5 leading-tight">O Furacão do Madeira</p>
+                    <p class="text-sm leading-relaxed mt-3 max-w-sm mx-auto md:mx-0">
+                        Sport Club Genus de Porto Velho. Desde 1981, defendendo as cores Amarelo e Grená em Rondônia.
+                    </p>
+
+                    <!-- Redes sociais (troque os # pelos links oficiais) -->
+                    <div class="flex items-center justify-center md:justify-start gap-3 mt-6">
+                        <a href="#" aria-label="Instagram" class="w-10 h-10 flex items-center justify-center rounded-full border border-zinc-700 text-gray-300 hover:text-ouro hover:border-ouro transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                        </a>
+                        <a href="#" aria-label="Facebook" class="w-10 h-10 flex items-center justify-center rounded-full border border-zinc-700 text-gray-300 hover:text-ouro hover:border-ouro transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                        </a>
+                        <a href="#" aria-label="YouTube" class="w-10 h-10 flex items-center justify-center rounded-full border border-zinc-700 text-gray-300 hover:text-ouro hover:border-ouro transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+                        </a>
+                        <a href="#" aria-label="WhatsApp" class="w-10 h-10 flex items-center justify-center rounded-full border border-zinc-700 text-gray-300 hover:text-ouro hover:border-ouro transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- O Clube -->
+                <div class="md:col-span-3">
+                    <h4 class="text-xs font-bold tracking-widest uppercase text-ouro mb-5">O Clube</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="{{ url_for('index') }}#historia" class="hover:text-white transition-colors">Nossa História</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Estatuto Oficial</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Contato</a></li>
+                    </ul>
+                </div>
+
+                <!-- Sócios -->
+                <div class="md:col-span-4">
+                    <h4 class="text-xs font-bold tracking-widest uppercase text-ouro mb-5">Seja Sócio</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="{{ url_for('planos') }}#socio-torcedor" class="hover:text-white transition-colors">Sócio-Torcedor</a></li>
+                        <li><a href="{{ url_for('planos') }}#socio-investidor" class="hover:text-white transition-colors">Sócio-Investidor</a></li>
+                        <li><a href="{{ url_for('planos') }}#vitrine-ingressos" class="hover:text-white transition-colors">Ingressos</a></li>
+                        <li><a href="{{ url_for('planos') }}#faq" class="hover:text-white transition-colors">Dúvidas Frequentes</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Linha final -->
+            <div class="mt-12 pt-6 border-t border-zinc-800/70 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-zinc-500 text-center md:text-left">
+                <p>&copy; <span id="footer-ano">2026</span> Sport Club Genus de Porto Velho. Todos os direitos reservados.</p>
+                <p class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
+                    <span>Estádio Aluízio Ferreira &bull; Porto Velho, RO</span>
+                    <a href="#" class="hover:text-white transition-colors">Política de Privacidade</a>
+                    <a href="#" class="hover:text-white transition-colors">Termos</a>
+                </p>
+            </div>
+        </div>
+
+        <script>
+            document.getElementById('footer-ano').innerText = new Date().getFullYear();
+        </script>
+    </footer>
+    {% endblock %}
+
+    <!-- SCRIPTS COMUNS -->
+    <script>
+        // MENU HAMBÚRGUER (MOBILE)
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const btn = document.getElementById('hamburger-btn');
+            const iconAbrir = document.getElementById('icon-abrir');
+            const iconFechar = document.getElementById('icon-fechar');
+
+            const aberto = menu.classList.toggle('hidden') === false;
+            iconAbrir.classList.toggle('hidden', aberto);
+            iconFechar.classList.toggle('hidden', !aberto);
+            btn.setAttribute('aria-expanded', aberto ? 'true' : 'false');
+        }
+
+        function fecharMenu() {
+            document.getElementById('mobile-menu').classList.add('hidden');
+            document.getElementById('icon-abrir').classList.remove('hidden');
+            document.getElementById('icon-fechar').classList.add('hidden');
+            document.getElementById('hamburger-btn').setAttribute('aria-expanded', 'false');
+        }
+    </script>
+
+    {# Scripts específicos de cada página #}
+    {% block scripts %}{% endblock %}
+</body>
+</html>
