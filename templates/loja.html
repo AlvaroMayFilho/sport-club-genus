@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Loja Oficial | Sport Club Genus{% endblock %}
+
+{% block content %}
+    <!-- HERO DA LOJA -->
+    <section class="w-full py-20 px-6 text-center bg-zinc950 flex flex-col items-center border-b border-zinc-800">
+        <span class="text-ouro font-bold text-sm tracking-widest uppercase mb-4 block">Produtos Oficiais</span>
+        <h1 class="font-display text-5xl md:text-7xl uppercase tracking-wide leading-tight mb-6">
+            <span class="text-white">Vista o </span>
+            <span style="color: transparent; -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.4);">Furacão</span>
+        </h1>
+        <p class="text-gray-400 font-medium max-w-2xl text-lg mb-8">
+            Adquira o manto sagrado e os acessórios oficiais do Sport Club Genus. Sócios possuem até 25% de desconto em toda a loja.
+        </p>
+    </section>
+
+    <!-- ESPAÇAMENTO -->
+    <div class="h-6 w-full bg-[#f8f9fa]"></div>
+
+    <!-- VITRINE DE PRODUTOS -->
+    <section class="w-full max-w-7xl mx-auto px-6 md:px-12 py-16 mb-20">
+        
+        <!-- Filtros / Barra Superior da Loja -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-12 border-b border-gray-200 pb-4">
+            <h2 class="font-display text-3xl uppercase text-dark">Lançamentos 2026</h2>
+            <div class="flex gap-4 mt-4 md:mt-0 text-sm font-bold text-gray-500 uppercase">
+                <a href="#" class="text-grena border-b-2 border-grena pb-1">Todos</a>
+                <a href="#" class="hover:text-dark transition-colors">Vestuário</a>
+                <a href="#" class="hover:text-dark transition-colors">Acessórios</a>
+            </div>
+        </div>
+
+        <!-- Grid de Produtos -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+
+            <!-- Produto 1: Camisa -->
+            <div class="bg-white rounded-sm shadow-lg border border-gray-100 overflow-hidden group flex flex-col relative">
+                <!-- Badge -->
+                <div class="absolute top-3 left-3 bg-grena text-white text-[10px] font-bold uppercase px-2 py-1 rounded-sm z-10">Novo Manto</div>
+                
+                <!-- Imagem -->
+                <div class="h-64 bg-gray-50 flex items-center justify-center p-4 relative overflow-hidden">
+                    <img src="{{ url_for('static', filename='img/camiseta_frente.png') }}" alt="Camisa Oficial" class="max-h-full object-contain group-hover:scale-110 transition-transform duration-500">
+                </div>
+                
+                <!-- Informações -->
+                <div class="p-6 flex flex-col flex-grow">
+                    <h3 class="font-display text-xl uppercase text-dark mb-1">Camisa I Oficial 2026</h3>
+                    <p class="text-xs text-gray-500 mb-4 flex-grow">Manto titular do Furacão do Madeira.</p>
+                    
+                    <div class="mb-4">
+                        <span class="block text-2xl font-bold text-dark">R$ 149,90</span>
+                        <span class="block text-xs text-grena font-bold mt-1">Sócios Ouro/Diamante: Grátis*</span>
+                    </div>
+                    
+                    <button class="w-full bg-dark hover:bg-grena text-white font-bold py-3 uppercase text-xs tracking-wide rounded-sm transition-colors">
+                        Comprar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Produto 2: Bolsa Térmica -->
+            <div class="bg-white rounded-sm shadow-lg border border-gray-100 overflow-hidden group flex flex-col relative">
+                <!-- Imagem -->
+                <div class="h-64 bg-gray-50 flex items-center justify-center p-4 relative overflow-hidden">
+                    <img src="{{ url_for('static', filename='img/bolsa_termica.png') }}" alt="Bolsa Térmica" class="max-h-full object-contain group-hover:scale-110 transition-transform duration-500">
+                </div>
+                
+                <!-- Informações -->
+                <div class="p-6 flex flex-col flex-grow">
+                    <h3 class="font-display text-xl uppercase text-dark mb-1">Bolsa Térmica Viagem</h3>
+                    <p class="text-xs text-gray-500 mb-4 flex-grow">Conserve suas bebidas com a identidade do clube.</p>
+                    
+                    <div class="mb-4">
+                        <span class="block text-2xl font-bold text-dark">R$ 89,90</span>
+                        <span class="block text-xs text-ouro font-bold mt-1">Sócios: A partir de R$ 67,40</span>
+                    </div>
+                    
+                    <button class="w-full bg-dark hover:bg-grena text-white font-bold py-3 uppercase text-xs tracking-wide rounded-sm transition-colors">
+                        Comprar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Produto 3: Garrafa -->
+            <div class="bg-white rounded-sm shadow-lg border border-gray-100 overflow-hidden group flex flex-col relative">
+                <!-- Imagem -->
+                <div class="h-64 bg-gray-50 flex items-center justify-center p-4 relative overflow-hidden">
+                    <img src="{{ url_for('static', filename='img/garrafa.png') }}" alt="Garrafa de Água" class="max-h-full object-contain group-hover:scale-110 transition-transform duration-500">
+                </div>
+                
+                <!-- Informações -->
+                <div class="p-6 flex flex-col flex-grow">
+                    <h3 class="font-display text-xl uppercase text-dark mb-1">Garrafa Térmica 500ml</h3>
+                    <p class="text-xs text-gray-500 mb-4 flex-grow">Garrafa em alumínio preta fosca com escudo clássico.</p>
+                    
+                    <div class="mb-4">
+                        <span class="block text-2xl font-bold text-dark">R$ 49,90</span>
+                        <span class="block text-xs text-ouro font-bold mt-1">Sócios: A partir de R$ 37,40</span>
+                    </div>
+                    
+                    <button class="w-full bg-dark hover:bg-grena text-white font-bold py-3 uppercase text-xs tracking-wide rounded-sm transition-colors">
+                        Comprar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Produto 4: Chaveiro -->
+            <div class="bg-white rounded-sm shadow-lg border border-gray-100 overflow-hidden group flex flex-col relative">
+                <!-- Imagem -->
+                <div class="h-64 bg-gray-50 flex items-center justify-center p-4 relative overflow-hidden">
+                    <img src="{{ url_for('static', filename='img/chaveiro.png') }}" alt="Chaveiro Genus" class="max-h-full object-contain group-hover:scale-110 transition-transform duration-500">
+                </div>
+                
+                <!-- Informações -->
+                <div class="p-6 flex flex-col flex-grow">
+                    <h3 class="font-display text-xl uppercase text-dark mb-1">Chaveiro Enamel Premium</h3>
+                    <p class="text-xs text-gray-500 mb-4 flex-grow">Metal esmaltado com fita bordada nas cores do clube.</p>
+                    
+                    <div class="mb-4">
+                        <span class="block text-2xl font-bold text-dark">R$ 29,90</span>
+                        <span class="block text-xs text-ouro font-bold mt-1">Sócios: A partir de R$ 22,40</span>
+                    </div>
+                    
+                    <button class="w-full bg-dark hover:bg-grena text-white font-bold py-3 uppercase text-xs tracking-wide rounded-sm transition-colors">
+                        Comprar
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+{% endblock %}

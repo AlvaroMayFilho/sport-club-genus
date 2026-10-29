@@ -39,6 +39,11 @@ def index():
 def planos():
     return render_template('planos.html')
 
+# NOVA ROTA: Loja Oficial
+@app.route('/loja')
+def loja():
+    return render_template('loja.html')
+
 # 2. Rota Backend API (Entrega os dados em JSON)
 @app.route('/api/jogos', methods=['GET'])
 def obter_jogos():
